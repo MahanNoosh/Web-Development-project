@@ -1,6 +1,6 @@
 import { RiDeleteBin2Line } from "react-icons/ri";
 import { RiEditBoxLine } from "react-icons/ri";
-import { toaster } from "./ui/toaster";
+import { toaster } from "./toaster";
 import { Box, Heading, HStack, IconButton, Image, Text, Button, Input, VStack } from "@chakra-ui/react"
 import { useColorModeValue } from '@/components/ui/color-mode'
 import { useState } from "react";
