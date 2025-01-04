@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Dialog } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import {Route, Routes } from "react-router-dom";
 import CreatePage from "./pages/CreatePage";
 import HomePage from "./pages/HomePage";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/ui/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 
 const App = () => {

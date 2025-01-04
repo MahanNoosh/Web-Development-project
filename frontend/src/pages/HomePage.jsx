@@ -4,7 +4,7 @@ import { SimpleGrid } from "@chakra-ui/react"
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useProductStore } from '@/store/product'
-import ProductCard from '@/components/ProductCard'
+import ProductCard from '@/components/ui/ProductCard'
 
 const HomePage = () => {
   const {fetchProducts, products} = useProductStore()
