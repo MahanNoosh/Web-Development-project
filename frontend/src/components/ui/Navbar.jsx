@@ -3,7 +3,7 @@ import { React, useState } from 'react'
 import { LuPlus } from "react-icons/lu";
 import { FiPlusCircle } from "react-icons/fi";
 import { Link } from 'react-router-dom';
-import { ColorModeButton,useColorModeValue } from './ui/color-mode';
+import { ColorModeButton,useColorModeValue } from './color-mode';
 
 
 const Navbar = () => {
