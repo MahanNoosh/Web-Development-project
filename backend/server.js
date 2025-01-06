@@ -2,7 +2,9 @@ import express from "express"
 import dotenv from "dotenv"
 import {connectDB} from "./config/database.js"
 import productRoutes from "./routes/product.route.js"
+import userRouters from "./routes/user.route.js"
 import  path  from "path";
+import cookieParser from "cookie-parser"
 
 dotenv.config();
 
@@ -11,11 +13,16 @@ const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 const __dirname = path.resolve();
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
 
+
+app.use("/api/users", userRouters);
 app.use("/api/products", productRoutes);
+
 if(process.env.NODE_ENV === "production"){
     app.use(express.static(path.join(__dirname, "/frontend/dist")));
-    app.get("*", (req, res) => {
+    app.get("*", (_, res) => {
         res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
     })
 }

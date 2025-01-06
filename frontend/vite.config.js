@@ -4,8 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import dotenv from "dotenv";
 
 dotenv.config();
-const PORT = process.env.PORT || 8000;
-
+const PORT = process.env.PORT || 2450;
 
 
 // https://vitejs.dev/config/

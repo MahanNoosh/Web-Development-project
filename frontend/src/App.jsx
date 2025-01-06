@@ -3,8 +3,10 @@ import { Box } from "@chakra-ui/react";
 import {Route, Routes } from "react-router-dom";
 import CreatePage from "./pages/CreatePage";
 import HomePage from "./pages/HomePage";
+import Login from "./pages/LoginPage";
 import Navbar from "./components/ui/Navbar";
 import { Toaster } from "@/components/ui/toaster";
+import Signup from "./pages/SignUpPage";
 
 const App = () => {
   return (
@@ -14,6 +16,8 @@ const App = () => {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/create" element={<CreatePage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
     </Routes>
    </Box>
   );
