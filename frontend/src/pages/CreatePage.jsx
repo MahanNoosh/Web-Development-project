@@ -3,13 +3,15 @@ import { toaster } from "@/components/ui/toaster"
 import { useProductStore } from '@/store/product'
 import { Box, Container, Heading, VStack, Input, Text, Button } from '@chakra-ui/react'
 import { useState } from 'react'
+import { useProfile } from '@/store/profile'
 
 const CreatePage = () => {
+  const loggedInUser = useProfile(state => state.loggedinUser);
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
     image: "",
-  })
+    creator: loggedInUser.userid })
   const {createProduct} =useProductStore()
   const handleAddProduct = async() => {
     const {success, message} = await createProduct(newProduct)
@@ -33,6 +35,7 @@ const CreatePage = () => {
       name: "",
       price: "",
       image: "",
+      creator: loggedInUser.userid
     })
   }
   return(

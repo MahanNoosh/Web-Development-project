@@ -7,7 +7,7 @@ export const useProductStore = create((set) => ({
   createProduct: async (newProduct) => {
     const { isValidProduct } = useProductStore.getState();
     if (!isValidProduct(newProduct)) {
-      return { success: false, message: "Please enter all the fields correctly" };
+      return { success: false, message: error.response?.data?.message || "Please enter all the fields correctly" };
     }
 
     try {
@@ -34,7 +34,7 @@ export const useProductStore = create((set) => ({
   },
 
   isValidProduct: (newProduct) => {
-    return newProduct.name && newProduct.image && newProduct.price;
+    return newProduct.name && newProduct.price;
   },
 
   deleteProduct: async (id) => {

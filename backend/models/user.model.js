@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { set } from "mongoose";
 
 const userSchema = new mongoose.Schema(
     {
@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema(
             set: (v) => v.trim().toLowerCase(),
         },
         username: {
+            type: String,
+            required: true,
+        },
+        userid: {
             type: String,
             unique: true,
             required: true,
@@ -24,7 +28,7 @@ const userSchema = new mongoose.Schema(
             required: true,
             set: (v) => v.trim().toLowerCase(),
         },
-        phone: {
+        instagram: {
             type: String,
             unique: true,
             sparse: true,

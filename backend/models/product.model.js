@@ -7,12 +7,15 @@ const productSchema = mongoose.Schema({
     },
     image: {
         type: String,
-        required: true
     },  
     price: {
         type: String,
         required: true,
         default: 0
+    },
+    creator:{
+        type: String,
+        required: true
     }
 }, {
     timestamps: true

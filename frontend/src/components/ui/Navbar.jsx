@@ -4,12 +4,16 @@ import { LuPlus } from "react-icons/lu";
 import { FiPlusCircle } from "react-icons/fi";
 import { Link } from 'react-router-dom';
 import { ColorModeButton,useColorModeValue } from './color-mode';
+import { useProfile } from '@/store/profile';
+
+
 
 
 const Navbar = () => {
   const [isHovering, setIsHovering] = useState(false)
+  const loggedinUser = useProfile(state => state.loggedinUser);
   return (
-    <Container maxW="1140px" px = {4}>
+    <Container maxW="full" px = {4}>
       <Flex 
         h={16} 
         alignItems={'center'} 
@@ -33,7 +37,7 @@ const Navbar = () => {
         </Text>
         </Link>
         <HStack gap= {2} alignItems={"center"} >
-          <Link to="/create">
+          <Link to={loggedinUser ? "/create" : "/login"}>
             <Button 
               height={10} 
               width={1} 
@@ -46,6 +50,23 @@ const Navbar = () => {
             </Button>
           </Link>
           <ColorModeButton/>
+          <Link to={loggedinUser ? "/dashboard" : "/login"}>
+            <Button
+              size={"lg"}
+              variant="subtle"
+              borderRadius={"full"}
+              bgGradient={"to-br"}
+              gradientFrom = {useColorModeValue("blue.600", "blue.200")}
+              gradientTo= {useColorModeValue("red.600", "red.200")}
+            >
+              <Text 
+                fontSize ={"sm"} 
+                color={useColorModeValue("white", "black")}
+              >
+                {loggedinUser && loggedinUser.username || "Login"}
+              </Text>
+            </Button>
+          </Link>
         </HStack>
       </Flex>
     </Container>

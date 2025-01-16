@@ -5,13 +5,14 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useProductStore } from '@/store/product'
 import ProductCard from '@/components/ui/ProductCard'
+import { useProfile } from '@/store/profile'
 
 const HomePage = () => {
+  const loggedinUser = useProfile((state) => state.loggedinUser)
   const {fetchProducts, products} = useProductStore()
   useEffect(() => {
     fetchProducts()
   }, [fetchProducts]);
-  console.log(products);
   return (
     <Container maxWidth={"1140px"} py ={12}>
       <VStack gap ={8}>
@@ -40,7 +41,7 @@ const HomePage = () => {
           fontSize={{ base: "md", sm: "lg" }}
           >
             No product found, {" "}
-            <Link to="/create">
+            <Link to={loggedinUser ? "/create" : "/login"}>
               <Text
                 as={"span"}
                 fontSize={{ base: "md", sm: "lg" }}
