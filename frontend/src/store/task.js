@@ -1,48 +1,48 @@
 import { create } from "zustand";
 import axios from "axios";
 
-export const useProductStore = create((set) => ({
-  products: [],
+export const useTaskFeed = create((set) => ({
+  tasks: [],
 
-  createProduct: async (newProduct) => {
-    const { isValidProduct } = useProductStore.getState();
-    if (!isValidProduct(newProduct)) {
+  createTask: async (newTask) => {
+    const { isValidTask } = useTaskFeed.getState();
+    if (!isValidTask(newTask)) {
       return { success: false, message: error.response?.data?.message || "Please enter all the fields correctly" };
     }
 
     try {
-      const { data } = await axios.post("/api/products", newProduct, {
+      const { data } = await axios.post("/api/tasks", newTask, {
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      set((state) => ({ products: [...state.products, data] }));
-      return { success: true, message: "Product created successfully" };
+      set((state) => ({ tasks: [...state.tasks, data] }));
+      return { success: true, message: "Task created successfully" };
     } catch (error) {
       return { success: false, message: error.response?.data?.message || "Something went wrong." };
     }
   },
 
-  fetchProducts: async () => {
+  fetchTasks: async () => {
     try {
-      const { data } = await axios.get("/api/products");
-      set({ products: data.data });
+      const { data } = await axios.get("/api/tasks");
+      set({ tasks: data.data });
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching Tasks:", error);
     }
   },
 
-  isValidProduct: (newProduct) => {
-    return newProduct.name && newProduct.price;
+  isValidTask: (newTask) => {
+    return newTask.name && newTask.price;
   },
 
-  deleteProduct: async (id) => {
+  deleteTask: async (id) => {
     try {
-      const { data } = await axios.delete(`/api/products/${id}`);
+      const { data } = await axios.delete(`/api/tasks/${id}`);
       if (!data.success) return { success: false, message: data.message };
       set((state) => ({
-        products: state.products.filter((product) => product._id !== id),
+        tasks: state.tasks.filter((task) => task._id !== id),
       }));
       return { success: true, message: data.message };
     } catch (error) {
@@ -50,17 +50,17 @@ export const useProductStore = create((set) => ({
     }
   },
 
-  updateProduct: async (id, updatedProduct) => {
+  updateTask: async (id, updatedTask) => {
     try {
-      const { data } = await axios.put(`/api/products/${id}`, updatedProduct, {
+      const { data } = await axios.put(`/api/tasks/${id}`, updatedTask, {
         headers: {
           "Content-Type": "application/json",
         },
       });
       if (!data.success) return { success: false, message: data.message };
       set((state) => ({
-        products: state.products.map((product) =>
-          product._id === id ? data.data : product
+        tasks: state.tasks.map((task) =>
+          task._id === id ? data.data : task
         ),
       }));
       return { success: true, message: data.message };

@@ -1,20 +1,20 @@
 import { useColorModeValue } from '@/components/ui/color-mode'
 import { toaster } from "@/components/ui/toaster"
-import { useProductStore } from '@/store/product'
+import { useTaskFeed } from '@/store/task'
 import { Box, Container, Heading, VStack, Input, Text, Button } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useProfile } from '@/store/profile'
 
 const CreatePage = () => {
   const loggedInUser = useProfile(state => state.loggedinUser);
-  const [newProduct, setNewProduct] = useState({
+  const [newTask, setNewTask] = useState({
     name: "",
     price: "",
     image: "",
     creator: loggedInUser.userid })
-  const {createProduct} =useProductStore()
-  const handleAddProduct = async() => {
-    const {success, message} = await createProduct(newProduct)
+  const {createTask} =useTaskFeed()
+  const handleAddTask = async() => {
+    const {success, message} = await createTask(newTask)
     if (success) {
       toaster.create({
         title: "Success",
@@ -31,7 +31,7 @@ const CreatePage = () => {
         description: message
       })
     }
-    setNewProduct({
+    setNewTask({
       name: "",
       price: "",
       image: "",
@@ -51,36 +51,36 @@ const CreatePage = () => {
               fontWeight="bold"
               textAlign="center"
           >
-            Create A New Product
+            Create A New Task
           </Text>
         </Heading>
         <Box w={"full"} p={6} bg = {useColorModeValue("white", "black")} rounded={"lg"} shadow={"md"}> 
           <VStack spacing = {4}>
             <Input 
-                placeholder='Product Name' 
+                placeholder='Task Name' 
                 name='name'
-                value={newProduct.name} 
-                onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
+                value={newTask.name} 
+                onChange={(e) => setNewTask({...newTask, name: e.target.value})}
             />
             <Input 
                 placeholder='Price' 
                 name='price'
                 type='number'
-                value={newProduct.price} 
-                onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
+                value={newTask.price} 
+                onChange={(e) => setNewTask({...newTask, price: e.target.value})}
             />
             <Input 
                 placeholder='Image URL' 
                 name='image'
-                value={newProduct.image} 
-                onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
+                value={newTask.image} 
+                onChange={(e) => setNewTask({...newTask, image: e.target.value})}
             />
             <Button 
               colorScheme={useColorModeValue("white", "black")}
-              onClick={handleAddProduct}
+              onClick={handleAddTask}
               w = {"full"}
             >
-              Add Product
+              Add Task
             </Button>
           </VStack>
         </Box>

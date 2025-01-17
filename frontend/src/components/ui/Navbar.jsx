@@ -13,14 +13,14 @@ const Navbar = () => {
   const [isHovering, setIsHovering] = useState(false)
   const loggedinUser = useProfile(state => state.loggedinUser);
   return (
-    <Container maxW="full" px = {4}>
+    <Container maxW="full" px = {2}>
       <Flex 
         h={16} 
         alignItems={'center'} 
         justifyContent={'space-between'}
           flexDir={{
             base: "column",
-            sm: "row"
+            sm: "row",
           }}
       >
         <Link to="/">
@@ -33,7 +33,7 @@ const Navbar = () => {
             fontWeight="bold"
             textAlign="center"
         >
-          Product Store
+          TaskShare
         </Text>
         </Link>
         <HStack gap= {2} alignItems={"center"} >

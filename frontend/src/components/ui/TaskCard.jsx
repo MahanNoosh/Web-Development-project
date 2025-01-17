@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useColorModeValue } from "@/components/ui/color-mode";
 import { useState, useEffect } from "react";
-import { useProductStore } from "@/store/product";
+import { useTaskFeed } from "@/store/task";
 import { getUser as getCreator } from "/src/management/user";
 import { useProfile } from "@/store/profile";
 import {
@@ -36,14 +36,14 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
-const ProductCard = ({ product }) => {
+const TaskCard = ({ task }) => {
   const noImage =
     "https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg";
   const loggedinUser = useProfile((state) => state.loggedinUser);
   const textColor = useColorModeValue("gray.800", "gray.200");
   const bg = useColorModeValue("white", "gray.800");
-  const [updatedProduct, setUpdatedProduct] = useState(product);
-  const { deleteProduct, updateProduct } = useProductStore();
+  const [updatedTask, setUpdatedTask] = useState(task);
+  const {deleteTask, updateTask } = useTaskFeed();
   const [creatorData, setUser] = useState({
     success: false,
     data: {},
@@ -51,14 +51,14 @@ const ProductCard = ({ product }) => {
 
   useEffect(() => {
     const fetchCreator = async () => {
-      const data = await getCreator(product.creator);
+      const data = await getCreator(task.creator);
       setUser(data);
     };
     fetchCreator();
-  }, [product.creator]);
+  }, [task.creator]);
 
   const handleDelete = async (id) => {
-    const { success, message } = await deleteProduct(id);
+    const { success, message } = await deleteTask(id);
     if (success) {
       toaster.create({
         title: "Success",
@@ -75,8 +75,8 @@ const ProductCard = ({ product }) => {
       });
     }
   };
-  const handleUpdate = async (id, updatedProduct) => {
-    const { success, message } = await updateProduct(id, updatedProduct);
+  const handleUpdate = async (id, updatedtask) => {
+    const { success, message } = await updateTask(id, updatedtask);
     if (success) {
       toaster.create({
         title: "Success",
@@ -98,15 +98,15 @@ const ProductCard = ({ product }) => {
       shadow="lg"
       rounded="lg"
       h={"500px"}
-      w={"500px"}
+      w={"300px"}
       overflow="hidden"
       transition="all 0.3s"
       _hover={{ transform: "Scale(1.05)" }}
       bg={bg}
     >
       <Image
-        src={product.image}
-        alt={noImage}
+        src={task.image || noImage}
+        alt={task.name}
         h="50%"
         w="full"
         objectFit={"cover"}
@@ -124,7 +124,7 @@ const ProductCard = ({ product }) => {
           gradientTo={useColorModeValue("yellow.500", "yellow.200")}
           bgClip={"text"}
         >
-          {product.name}
+          {task.name}
         </Heading>
         <Text
           fontWeight="bold"
@@ -137,7 +137,7 @@ const ProductCard = ({ product }) => {
           gradientTo={useColorModeValue("purple.600", "purple.200")}
           bgClip={"text"}
         >
-          {product.price}
+          {task.price}
         </Text>
         <HStack gap={1} justifyContent="flex-start">
           <DialogRoot motionPreset={"scale"} size={"sm"}>
@@ -149,7 +149,7 @@ const ProductCard = ({ product }) => {
                     ? "flex"
                     : "none"
                 }
-                aria-label="Edit product"
+                aria-label="Edit task"
                 variant="ghost"
                 size={"xs"}
                 _icon={{ color: useColorModeValue("blue.600", "blue.200") }}
@@ -159,17 +159,17 @@ const ProductCard = ({ product }) => {
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Update Product</DialogTitle>
+                <DialogTitle>Update task</DialogTitle>
               </DialogHeader>
               <DialogBody>
                 <VStack gap={2}>
                   <Input
-                    placeholder="Product Name"
+                    placeholder="task Name"
                     name="name"
-                    value={updatedProduct.name}
+                    value={updatedTask.name}
                     onChange={(e) =>
-                      setUpdatedProduct({
-                        ...updatedProduct,
+                      setUpdatedTask({
+                        ...updatedTask,
                         name: e.target.value,
                       })
                     }
@@ -178,10 +178,10 @@ const ProductCard = ({ product }) => {
                     placeholder="Price"
                     name="price"
                     type="number"
-                    value={updatedProduct.price}
+                    value={updatedTask.price}
                     onChange={(e) =>
-                      setUpdatedProduct({
-                        ...updatedProduct,
+                      setUpdatedTask({
+                        ...updatedTask,
                         price: e.target.value,
                       })
                     }
@@ -189,10 +189,10 @@ const ProductCard = ({ product }) => {
                   <Input
                     placeholder="Image URL"
                     name="image"
-                    value={updatedProduct.image}
+                    value={updatedTask.image}
                     onChange={(e) =>
-                      setUpdatedProduct({
-                        ...updatedProduct,
+                      setUpdatedTask({
+                        ...updatedTask,
                         image: e.target.value,
                       })
                     }
@@ -205,7 +205,7 @@ const ProductCard = ({ product }) => {
                 </DialogActionTrigger>
                 <DialogActionTrigger asChild>
                   <Button
-                    onClick={() => handleUpdate(product._id, updatedProduct)}
+                    onClick={() => handleUpdate(task._id, updatedTask)}
                   >
                     Save
                   </Button>
@@ -223,7 +223,7 @@ const ProductCard = ({ product }) => {
                     ? "flex"
                     : "none"
                 }
-                aria-label="Delete product"
+                aria-label="Delete task"
                 variant="ghost"
                 size={"xs"}
                 _icon={{ color: useColorModeValue("red.600", "red.200") }}
@@ -238,7 +238,7 @@ const ProductCard = ({ product }) => {
               <DialogBody>
                 <p>
                   This action cannot be undone. This will permanently delete
-                  this product and remove its data from our systems.
+                  this task and remove its data from our systems.
                 </p>
               </DialogBody>
               <DialogFooter>
@@ -247,7 +247,7 @@ const ProductCard = ({ product }) => {
                 </DialogActionTrigger>
                 <Button
                   colorPalette="red"
-                  onClick={() => handleDelete(product._id)}
+                  onClick={() => handleDelete(task._id)}
                 >
                   Delete
                 </Button>
@@ -331,4 +331,4 @@ const ProductCard = ({ product }) => {
   );
 };
 
-export default ProductCard;
+export default TaskCard;

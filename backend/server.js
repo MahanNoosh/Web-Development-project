@@ -1,7 +1,7 @@
 import express from "express"
 import dotenv from "dotenv"
 import {connectDB} from "./config/database.js"
-import productRoutes from "./routes/product.route.js"
+import taskRoutes from "./routes/task.route.js"
 import userRouters from "./routes/user.route.js"
 import  path  from "path";
 import cookieParser from "cookie-parser"
@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 app.use("/api/users", userRouters);
-app.use("/api/products", productRoutes);
+app.use("/api/tasks", taskRoutes);
 
 if(process.env.NODE_ENV === "production"){
     app.use(express.static(path.join(__dirname, "/frontend/dist")));

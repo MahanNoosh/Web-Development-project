@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const productSchema = mongoose.Schema({
+const taskSchema = mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -21,6 +21,6 @@ const productSchema = mongoose.Schema({
     timestamps: true
 });
 
-const Product = mongoose.model("Product", productSchema);
+const Task = mongoose.model("Task", taskSchema);
 
-export default Product;
+export default Task;

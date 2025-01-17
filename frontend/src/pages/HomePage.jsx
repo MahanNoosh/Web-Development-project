@@ -3,16 +3,16 @@ import { useColorModeValue } from '@/components/ui/color-mode'
 import { SimpleGrid } from "@chakra-ui/react"
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useProductStore } from '@/store/product'
-import ProductCard from '@/components/ui/ProductCard'
+import { useTaskFeed } from '@/store/task'
+import TaskCard from '@/components/ui/TaskCard'
 import { useProfile } from '@/store/profile'
 
 const HomePage = () => {
   const loggedinUser = useProfile((state) => state.loggedinUser)
-  const {fetchProducts, products} = useProductStore()
+  const {fetchTasks, tasks} = useTaskFeed()
   useEffect(() => {
-    fetchProducts()
-  }, [fetchProducts]);
+    fetchTasks()
+  }, [fetchTasks]);
   return (
     <Container maxWidth={"1140px"} py ={12}>
       <VStack gap ={8}>
@@ -25,22 +25,22 @@ const HomePage = () => {
           bgClip={"text"}
           textAlign={"center"}
         >
-          Current Products
+          Current Tasks
         </Text>
         <SimpleGrid 
           columns={{base : 1, sm : 2, md : 3, lg : 4}}
           gap={10}
           w={"full"}
         >  
-          {products.map((product) => (
-            <ProductCard key={product._id} product={product} />
+          {tasks.map((task) => (
+            <TaskCard key={task._id} task={task} />
           ))}
         </SimpleGrid>
-        {products.length === 0 && (
+        {tasks.length === 0 && (
           <Text
           fontSize={{ base: "md", sm: "lg" }}
           >
-            No product found, {" "}
+            No Task found, {" "}
             <Link to={loggedinUser ? "/create" : "/login"}>
               <Text
                 as={"span"}
@@ -51,7 +51,7 @@ const HomePage = () => {
                 _hover={{textDecoration : "underline", textDecorationColor : useColorModeValue("blue.600", "blue.200")}}
                 bgClip={"text"}
               >
-                add a product
+                add a Task
               </Text>
             </Link>
          </Text>
