@@ -1,3 +1,4 @@
+import { u } from "framer-motion/client";
 import mongoose from "mongoose";
 
 const taskSchema = mongoose.Schema({
@@ -5,18 +6,51 @@ const taskSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    image: {
+    status: {
         type: String,
-    },  
-    price: {
-        type: String,
-        required: true,
-        default: 0
+        enum: ["In progress", "Completed", "Not started"],
+        default: "Not started",
     },
     creator:{
         type: String,
         required: true
-    }
+    },
+    isPublic: {
+        type: Boolean,
+        default: false
+    },
+    description: {
+        type: String
+    },
+    deadline: {
+        type: Date
+    },
+    tag:{
+        type: String
+    },
+    priority: {
+        type: Number,
+        default: 0
+    },
+    applause: {
+        type: Array,
+        items:{
+            type: String
+        },
+        default: ["mahannoosh"] //I applause everyone :)
+    },
+    duration:{
+        type: Number
+    },
+    startDate: {
+        type: Date
+    },
+    finishDate: {
+        type: Date
+    },
+    image: {
+        type: String
+    },
 }, {
     timestamps: true
 });
