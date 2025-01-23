@@ -9,7 +9,6 @@ const CreatePage = () => {
   const loggedInUser = useProfile(state => state.loggedinUser);
   const [newTask, setNewTask] = useState({
     name: "",
-    price: "",
     image: "",
     creator: loggedInUser.userid })
   const {createTask} =useTaskFeed()
@@ -33,7 +32,6 @@ const CreatePage = () => {
     }
     setNewTask({
       name: "",
-      price: "",
       image: "",
       creator: loggedInUser.userid
     })
@@ -61,13 +59,6 @@ const CreatePage = () => {
                 name='name'
                 value={newTask.name} 
                 onChange={(e) => setNewTask({...newTask, name: e.target.value})}
-            />
-            <Input 
-                placeholder='Price' 
-                name='price'
-                type='number'
-                value={newTask.price} 
-                onChange={(e) => setNewTask({...newTask, price: e.target.value})}
             />
             <Input 
                 placeholder='Image URL' 

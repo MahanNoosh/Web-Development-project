@@ -1,5 +1,6 @@
 import { RiDeleteBin2Line, RiEditBoxLine, RiMailFill } from "react-icons/ri";
 import { FaGithub, FaLinkedin, FaDiscord } from "react-icons/fa";
+import { TbProgressCheck, TbProgress, TbProgressX, TbProgressAlert } from "react-icons/tb";
 import { AiFillInstagram } from "react-icons/ai";
 import { toaster } from "./toaster";
 import {
@@ -12,6 +13,8 @@ import {
   Button,
   Input,
   VStack,
+  Badge,
+  Flex,
 } from "@chakra-ui/react";
 import { useColorModeValue } from "@/components/ui/color-mode";
 import { useState, useEffect } from "react";
@@ -93,18 +96,19 @@ const TaskCard = ({ task }) => {
       });
     }
   };
+  const height = task.image ? "500px" : "175px";
   return (
     <Box
       shadow="lg"
       rounded="lg"
-      h={"500px"}
-      w={"300px"}
+      h={height}
+      w={{base:"200px", sm:"300px", md:"400px", lg:"500px", xl:"600px"}}
       overflow="hidden"
       transition="all 0.3s"
       _hover={{ transform: "Scale(1.05)" }}
       bg={bg}
     >
-      <Image
+      {task.image && <Image
         src={task.image || noImage}
         alt={task.name}
         h="50%"
@@ -113,7 +117,13 @@ const TaskCard = ({ task }) => {
         mx="auto"
         borderRadius={"lg"}
       />
+}
       <Box p="4">
+        <Flex
+          justifyContent="space-between"
+          alignItems="center"
+          mb={2}
+        >
         <Heading
           as="h3"
           size={"xl"}
@@ -126,19 +136,16 @@ const TaskCard = ({ task }) => {
         >
           {task.name}
         </Heading>
-        <Text
-          fontWeight="bold"
-          fontSize={"sm"}
-          color={textColor}
-          mb={4}
-          textAlign="left"
-          bgGradient={"to-b"}
-          gradientFrom={useColorModeValue("blue.600", "blue.200")}
-          gradientTo={useColorModeValue("purple.600", "purple.200")}
-          bgClip={"text"}
+        <Badge
+        size={"xs"}
+        colorPalette={task.status === "Completed" ? "green" : task.status === "In progress" ? "orange" : task.status === "Overdue" ? "red" : "blue"}
         >
-          {task.price}
-        </Text>
+          {task.status === "Completed" ? <TbProgressCheck size={14}/> : task.status === "In progress" ? <TbProgress size={14}/> : task.status === "Overdue" ? <TbProgressX size={14}/> : <TbProgressAlert size={14}/>}
+          <Text fontSize={"10"}> 
+            {task.status}
+          </Text>
+        </Badge>
+        </Flex>
         <HStack gap={1} justifyContent="flex-start">
           <DialogRoot motionPreset={"scale"} size={"sm"}>
             <DialogTrigger asChild>
@@ -171,18 +178,6 @@ const TaskCard = ({ task }) => {
                       setUpdatedTask({
                         ...updatedTask,
                         name: e.target.value,
-                      })
-                    }
-                  />
-                  <Input
-                    placeholder="Price"
-                    name="price"
-                    type="number"
-                    value={updatedTask.price}
-                    onChange={(e) =>
-                      setUpdatedTask({
-                        ...updatedTask,
-                        price: e.target.value,
                       })
                     }
                   />

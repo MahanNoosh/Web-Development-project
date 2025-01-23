@@ -1,6 +1,5 @@
 import { Container, VStack, Text} from '@chakra-ui/react'
 import { useColorModeValue } from '@/components/ui/color-mode'
-import { SimpleGrid } from "@chakra-ui/react"
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useTaskFeed } from '@/store/task'
@@ -27,15 +26,9 @@ const HomePage = () => {
         >
           Current Tasks
         </Text>
-        <SimpleGrid 
-          columns={{base : 1, sm : 2, md : 3, lg : 4}}
-          gap={10}
-          w={"full"}
-        >  
           {tasks.map((task) => (
             <TaskCard key={task._id} task={task} />
           ))}
-        </SimpleGrid>
         {tasks.length === 0 && (
           <Text
           fontSize={{ base: "md", sm: "lg" }}

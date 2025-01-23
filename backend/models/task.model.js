@@ -1,4 +1,4 @@
-import { u } from "framer-motion/client";
+
 import mongoose from "mongoose";
 
 const taskSchema = mongoose.Schema({
@@ -8,7 +8,7 @@ const taskSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["In progress", "Completed", "Not started"],
+        enum: ["In progress", "Completed", "Not started", "Overdue"],
         default: "Not started",
     },
     creator:{

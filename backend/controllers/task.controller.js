@@ -12,7 +12,7 @@ export const getAllTasks = async (_, res) => {
 
 export const createTask = async (req, res)=>{
     const task = req.body;
-    if (!isValidTask(task)) {
+    if (!task.name) {
         return res.status(400).json({success: false, message: "Please enter all the fields correctly"})
     }
     const newTask = new Task(task)
@@ -22,10 +22,6 @@ export const createTask = async (req, res)=>{
     } catch (error) {
         res.status(500).json({success: false, "message": error.message})
     }
-}
-
-const isValidTask = (task) => {
-    return task.name && task.price;
 }
 
 export const updateTask = async (req, res)=>{

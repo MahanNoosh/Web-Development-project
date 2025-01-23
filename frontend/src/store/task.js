@@ -6,7 +6,7 @@ export const useTaskFeed = create((set) => ({
 
   createTask: async (newTask) => {
     const { isValidTask } = useTaskFeed.getState();
-    if (!isValidTask(newTask)) {
+    if (!newTask.name) {
       return { success: false, message: error.response?.data?.message || "Please enter all the fields correctly" };
     }
 
@@ -33,9 +33,6 @@ export const useTaskFeed = create((set) => ({
     }
   },
 
-  isValidTask: (newTask) => {
-    return newTask.name && newTask.price;
-  },
 
   deleteTask: async (id) => {
     try {
