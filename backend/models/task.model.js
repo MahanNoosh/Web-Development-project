@@ -32,12 +32,12 @@ const taskSchema = mongoose.Schema({
         type: Number,
         default: 0
     },
-    applause: {
+    reaction: {
         type: Array,
         items:{
             type: String
         },
-        default: ["mahannoosh"] //I applause everyone :)
+        default: ["mahannoosh"] //I react to everyone :)
     },
     duration:{
         type: Number

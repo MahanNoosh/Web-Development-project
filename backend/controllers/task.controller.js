@@ -24,19 +24,34 @@ export const createTask = async (req, res)=>{
     }
 }
 
-export const updateTask = async (req, res)=>{
-    const {id} = req.params;
-    const task = req.body;
-    if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({success: false, message: "Task not found"})
+export const updateTask = async (req, res) => {
+    const { id } = req.params;
+    const { task, user } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ success: false, message: "Task not found" });
     }
+
     try {
-        const updatedTask = await Task.findByIdAndUpdate(id, task, {new: true});
-        res.status(200).json({success: true, data: updatedTask})
+        let updatedTask;
+        if (user) {
+            // If user is provided, update the 'reaction' field specifically
+            updatedTask = await Task.findByIdAndUpdate(
+                id,
+                { $addToSet: { reaction: user } }, // Add user to the 'reaction' array
+                { new: true }
+            );
+        } else {
+            // If no user, update the task fields
+            updatedTask = await Task.findByIdAndUpdate(id, task, { new: true });
+        }
+
+        res.status(200).json({ success: true, data: updatedTask });
     } catch (error) {
-        res.status(500).json({success: false, "message": "Server error"})
+        res.status(500).json({ success: false, message: "Server error" });
     }
-}
+};
+
 
 export const deleteTask = async (req, res)=>{
     const {id} = req.params;

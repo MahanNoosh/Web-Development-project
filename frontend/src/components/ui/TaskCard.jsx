@@ -1,6 +1,7 @@
 import { RiDeleteBin2Line, RiEditBoxLine, RiMailFill } from "react-icons/ri";
 import { FaGithub, FaLinkedin, FaDiscord } from "react-icons/fa";
 import { TbProgressCheck, TbProgress, TbProgressX, TbProgressAlert } from "react-icons/tb";
+import { PiHandsClapping, PiSmileySadBold, PiSmileyBold, PiThumbsUpBold } from "react-icons/pi";
 import { AiFillInstagram } from "react-icons/ai";
 import { toaster } from "./toaster";
 import {
@@ -40,10 +41,7 @@ import {
 } from "@/components/ui/hover-card";
 
 const TaskCard = ({ task }) => {
-  const noImage =
-    "https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg";
   const loggedinUser = useProfile((state) => state.loggedinUser);
-  const textColor = useColorModeValue("gray.800", "gray.200");
   const bg = useColorModeValue("white", "gray.800");
   const [updatedTask, setUpdatedTask] = useState(task);
   const {deleteTask, updateTask } = useTaskFeed();
@@ -59,6 +57,7 @@ const TaskCard = ({ task }) => {
     };
     fetchCreator();
   }, [task.creator]);
+
 
   const handleDelete = async (id) => {
     const { success, message } = await deleteTask(id);
@@ -109,7 +108,7 @@ const TaskCard = ({ task }) => {
       bg={bg}
     >
       {task.image && <Image
-        src={task.image || noImage}
+        src={task.image}
         alt={task.name}
         h="50%"
         w="full"
@@ -250,6 +249,18 @@ const TaskCard = ({ task }) => {
               <DialogCloseTrigger />
             </DialogContent>
           </DialogRoot>
+          <Box>
+            <IconButton
+              aria-label="Motivate creator"
+              variant="plain"
+              size={"xs"}
+              _icon={{ color: useColorModeValue("blue.600", "blue.200") }}
+              onClick={() => handleUpdate(task._id, {task, user: loggedinUser.username})}
+            >
+              {task.status === "Completed" ? <PiHandsClapping/> : task.status === "In progress" ? <PiSmileyBold/> : task.status === "Overdue" ? <PiSmileySadBold/> : <PiThumbsUpBold/>}
+              {task.reaction.length}
+            </IconButton>
+          </Box>
         </HStack>
         <HoverCardRoot openDelay={100} closeDelay={100} size={"xm"}>
           <Text as={"span"} fontWeight="bold" fontSize={"6px"} color="gray.500">
