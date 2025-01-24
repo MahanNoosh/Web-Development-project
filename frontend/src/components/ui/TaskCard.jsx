@@ -271,7 +271,7 @@ const TaskCard = ({ task }) => {
             </DialogContent>
           </DialogRoot>
         </HStack>
-        <Float placement={"bottom-start"} offsetX={10} offsetY={7}>
+        <Float placement={"bottom-start"} offsetX={8} offsetY={8}>
           <IconButton
             aria-label="Motivate creator"
             variant=""
@@ -293,7 +293,7 @@ const TaskCard = ({ task }) => {
             {task.reaction.length}
           </IconButton>
         </Float>
-        <Float placement={"bottom-end"} offsetX={10} offsetY={7}>
+        <Float placement={"bottom-end"} offsetX={8} offsetY={4}>
           <HoverCardRoot
             openDelay={100}
             closeDelay={100}
