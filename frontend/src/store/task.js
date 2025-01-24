@@ -7,7 +7,12 @@ export const useTaskFeed = create((set) => ({
   createTask: async (newTask) => {
     const { isValidTask } = useTaskFeed.getState();
     if (!newTask.name) {
-      return { success: false, message: error.response?.data?.message || "Please enter all the fields correctly" };
+      return {
+        success: false,
+        message:
+          error.response?.data?.message ||
+          "Please enter all the fields correctly",
+      };
     }
 
     try {
@@ -20,7 +25,10 @@ export const useTaskFeed = create((set) => ({
       set((state) => ({ tasks: [...state.tasks, data] }));
       return { success: true, message: "Task created successfully" };
     } catch (error) {
-      return { success: false, message: error.response?.data?.message || "Something went wrong." };
+      return {
+        success: false,
+        message: error.response?.data?.message || "Something went wrong.",
+      };
     }
   },
 
@@ -33,7 +41,6 @@ export const useTaskFeed = create((set) => ({
     }
   },
 
-
   deleteTask: async (id) => {
     try {
       const { data } = await axios.delete(`/api/tasks/${id}`);
@@ -43,7 +50,10 @@ export const useTaskFeed = create((set) => ({
       }));
       return { success: true, message: data.message };
     } catch (error) {
-      return { success: false, message: error.response?.data?.message || "Something went wrong." };
+      return {
+        success: false,
+        message: error.response?.data?.message || "Something went wrong.",
+      };
     }
   },
 
@@ -56,13 +66,14 @@ export const useTaskFeed = create((set) => ({
       });
       if (!data.success) return { success: false, message: data.message };
       set((state) => ({
-        tasks: state.tasks.map((task) =>
-          task._id === id ? data.data : task
-        ),
+        tasks: state.tasks.map((task) => (task._id === id ? data.data : task)),
       }));
       return { success: true, message: data.message };
     } catch (error) {
-      return { success: false, message: error.response?.data?.message || "Something went wrong." };
+      return {
+        success: false,
+        message: error.response?.data?.message || "Something went wrong.",
+      };
     }
   },
 }));

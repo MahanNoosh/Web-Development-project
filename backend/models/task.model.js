@@ -1,59 +1,61 @@
-
 import mongoose from "mongoose";
 
-const taskSchema = mongoose.Schema({
+const taskSchema = mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     status: {
-        type: String,
-        enum: ["In progress", "Completed", "Not started", "Overdue"],
-        default: "Not started",
+      type: String,
+      enum: ["In progress", "Completed", "Not started", "Overdue"],
+      default: "Not started",
     },
-    creator:{
-        type: String,
-        required: true
+    creator: {
+      type: String,
+      required: true,
     },
     isPublic: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     description: {
-        type: String
+      type: String,
     },
     deadline: {
-        type: Date
+      type: Date,
     },
-    tag:{
-        type: String
+    tag: {
+      type: String,
     },
     priority: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
     reaction: {
-        type: Array,
-        items:{
-            type: String
-        },
-        default: ["mahannoosh"] //I react to everyone :)
+      type: Array,
+      items: {
+        type: String,
+      },
+      default: ["mahannoosh"], //I react to everyone :)
     },
-    duration:{
-        type: Number
+    duration: {
+      type: Number,
     },
     startDate: {
-        type: Date
+      type: Date,
     },
     finishDate: {
-        type: Date
+      type: Date,
     },
     image: {
-        type: String
+      type: String,
     },
-}, {
-    timestamps: true
-});
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const Task = mongoose.model("Task", taskSchema);
 

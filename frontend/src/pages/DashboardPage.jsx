@@ -84,8 +84,10 @@ const Dashboard = () => {
       password1: tempData.currentPassword,
       password2: userData.password,
     });
-    if(success){
-      const { success: deleted, message: DeleteMessage } = await deleteUser(loggedinUser._id);
+    if (success) {
+      const { success: deleted, message: DeleteMessage } = await deleteUser(
+        loggedinUser._id
+      );
       if (deleted) {
         toaster.create({
           title: "Success",
@@ -119,7 +121,7 @@ const Dashboard = () => {
       return;
     }
     if (!success) {
-        toaster.create({
+      toaster.create({
         title: "Error",
         duration: 3000,
         type: "error",
@@ -129,9 +131,9 @@ const Dashboard = () => {
   };
 
   const handleEdit = async () => {
-    if(userData.password === "") {
-      userData.password = loggedinUser.password
-      handleEdit()
+    if (userData.password === "") {
+      userData.password = loggedinUser.password;
+      handleEdit();
     }
     if (!validateContactForm(userData, tempData)) return;
     const { success, message } = await updateUser(loggedinUser._id, userData);
@@ -143,7 +145,6 @@ const Dashboard = () => {
         description: message,
       });
       fetchProfile();
-
     } else {
       toaster.create({
         title: "Error",
@@ -155,8 +156,11 @@ const Dashboard = () => {
   };
 
   const changePasswordHelper = async () => {
-
-    if (!tempData.currentPassword || !tempData.newPassword || !tempData.confirmPassword) {
+    if (
+      !tempData.currentPassword ||
+      !tempData.newPassword ||
+      !tempData.confirmPassword
+    ) {
       toaster.create({
         title: "Error",
         duration: 3000,
@@ -171,7 +175,12 @@ const Dashboard = () => {
     });
 
     if (success) {
-      if(!validatePasswordForm({password: tempData.newPassword}, {confirmPassword: tempData.confirmPassword})) {
+      if (
+        !validatePasswordForm(
+          { password: tempData.newPassword },
+          { confirmPassword: tempData.confirmPassword }
+        )
+      ) {
         setTempData({
           currentPassword: "",
           newPassword: "",
@@ -180,7 +189,7 @@ const Dashboard = () => {
         });
         return;
       }
-      setTempData({ ...tempData, authorized: true }); 
+      setTempData({ ...tempData, authorized: true });
     } else {
       toaster.create({
         title: "Error",
@@ -209,10 +218,10 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const handleChangePassword = async () => {
     if (tempData.authorized) {
-      const { success, message } = await updateUser(
-        loggedinUser._id,
-        { ...userData, password: tempData.newPassword }
-      );
+      const { success, message } = await updateUser(loggedinUser._id, {
+        ...userData,
+        password: tempData.newPassword,
+      });
       if (success) {
         toaster.create({
           title: "Success",
@@ -243,22 +252,20 @@ const Dashboard = () => {
   return (
     <Container>
       <DialogRoot role="alertdialog">
-      <DialogTrigger asChild>
-        <Button >
-          Delete Acocount
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are you sure?</DialogTitle>
-        </DialogHeader>
-        <DialogBody>
-          <VStack gap={5}>
-            <p>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our systems.
-            </p>
-            <PasswordInput
+        <DialogTrigger asChild>
+          <Button>Delete Acocount</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+          </DialogHeader>
+          <DialogBody>
+            <VStack gap={5}>
+              <p>
+                This action cannot be undone. This will permanently delete your
+                account and remove your data from our systems.
+              </p>
+              <PasswordInput
                 size={{ base: "md", md: "xl" }}
                 placeholder="Enter Your Password"
                 name="password"
@@ -270,42 +277,42 @@ const Dashboard = () => {
                   })
                 }
               />
-          </VStack>
-        </DialogBody>
-        <DialogFooter>
-          <DialogActionTrigger asChild>
-            <Button variant="outline">Cancel</Button>
-          </DialogActionTrigger>
-          <Button onClick={handleDeleteAccount} colorPalette="red">Delete account</Button>
-        </DialogFooter>
-        <DialogCloseTrigger />
-      </DialogContent>
-    </DialogRoot>
+            </VStack>
+          </DialogBody>
+          <DialogFooter>
+            <DialogActionTrigger asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogActionTrigger>
+            <Button onClick={handleDeleteAccount} colorPalette="red">
+              Delete account
+            </Button>
+          </DialogFooter>
+          <DialogCloseTrigger />
+        </DialogContent>
+      </DialogRoot>
 
       <DialogRoot role="alertdialog" motionPreset={"slideInBottom"} size={"sm"}>
-      <DialogTrigger asChild>
-        <Button>
-        Logout
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are you sure?</DialogTitle>
-        </DialogHeader>
-        <DialogBody>
-          <p>
-            you will have to login again to access your account
-          </p>
-        </DialogBody>
-        <DialogFooter>
-          <DialogActionTrigger asChild>
-            <Button >Cancel</Button>
-          </DialogActionTrigger>
-          <Button  variant="subtle" onClick={handleLogout}>Logout</Button>
-        </DialogFooter>
-        <DialogCloseTrigger />
-      </DialogContent>
-    </DialogRoot>
+        <DialogTrigger asChild>
+          <Button>Logout</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+          </DialogHeader>
+          <DialogBody>
+            <p>you will have to login again to access your account</p>
+          </DialogBody>
+          <DialogFooter>
+            <DialogActionTrigger asChild>
+              <Button>Cancel</Button>
+            </DialogActionTrigger>
+            <Button variant="subtle" onClick={handleLogout}>
+              Logout
+            </Button>
+          </DialogFooter>
+          <DialogCloseTrigger />
+        </DialogContent>
+      </DialogRoot>
       <DialogRoot motionPreset={"scale"} size={"sm"}>
         <DialogTrigger asChild>
           <Button>change password</Button>
@@ -397,16 +404,17 @@ const Dashboard = () => {
         />
         <OptionalContactInfo userData={userData} setUserData={setUserData} />
         <Checkbox
-                size={{base: "xs", md:"md"}}
-                checked={tempData.termsAccepted}
-                onCheckedChange={({ checked }) => setTempData({ ...tempData, termsAccepted: checked })}
-            >
-                <Text 
-                    fontSize={{base: "10px", md:"13px"}}
-                >
-                    I confirm the information is accurate and understand the legal consequences of providing false details.
-                </Text>
-            </Checkbox>
+          size={{ base: "xs", md: "md" }}
+          checked={tempData.termsAccepted}
+          onCheckedChange={({ checked }) =>
+            setTempData({ ...tempData, termsAccepted: checked })
+          }
+        >
+          <Text fontSize={{ base: "10px", md: "13px" }}>
+            I confirm the information is accurate and understand the legal
+            consequences of providing false details.
+          </Text>
+        </Checkbox>
         <Button onClick={handleEdit} w={"full"}>
           update
         </Button>
@@ -433,7 +441,9 @@ const OptionalContactInfo = ({ userData, setUserData }) => {
         name="github"
         value={userData.github}
         onChange={(e) =>
-          userData.github === ""? setUserData({ ...userData, github: undefined }):setUserData({ ...userData, github: e.target.value.trim() })
+          userData.github === ""
+            ? setUserData({ ...userData, github: undefined })
+            : setUserData({ ...userData, github: e.target.value.trim() })
         }
       />
       <Input
