@@ -129,7 +129,7 @@ const TaskCard = ({ task }) => {
           />
         </AspectRatio>
       )}
-      <Box p="4">
+      <Box p="5">
         <Flex justifyContent="space-between" alignItems="center">
           <Heading
             as="h3"
@@ -169,13 +169,36 @@ const TaskCard = ({ task }) => {
         </Flex>
         <Text
           mt={2}
-          fontSize={{ base: "10px", sm: "10px", md: "12px", lg: "14px", xl: "16px" }}
+          fontSize={{ base: "8px", sm: "10px", md: "12px", lg: "14px", xl: "16px" }}
           color="gray.500"
           textAlign="left"
         >
           {task.description}
         </Text>
-        <HStack gap={1} justifyContent="flex-start">
+        <Float placement={"bottom-start"} offsetX={10} offsetY={9}>
+          <IconButton
+            aria-label="Motivate creator"
+            variant=""
+            size={"xs"}
+            _icon={{ color: useColorModeValue("blue.600", "blue.200") }}
+            onClick={() =>
+              handleUpdate(task._id, { updatedTask, user: loggedinUser.username })
+            }
+          >
+            {task.status === "Completed" ? (
+              <PiHandsClapping />
+            ) : task.status === "In progress" ? (
+              <PiSmileyBold />
+            ) : task.status === "Overdue" ? (
+              <PiSmileySadBold />
+            ) : (
+              <PiThumbsUpBold />
+            )}
+            {task.reaction.length}
+          </IconButton>
+        </Float>
+        <Float placement={"bottom-end"} offsetX={8} offsetY={10}>
+        <HStack gap={0} justifyContent="flex-start">
           <DialogRoot motionPreset={"scale"} size={"sm"}>
             <DialogTrigger asChild>
               <IconButton
@@ -278,27 +301,7 @@ const TaskCard = ({ task }) => {
             </DialogContent>
           </DialogRoot>
         </HStack>
-        <Float placement={"bottom-start"} offsetX={8} offsetY={8}>
-          <IconButton
-            aria-label="Motivate creator"
-            variant=""
-            size={"xs"}
-            _icon={{ color: useColorModeValue("blue.600", "blue.200") }}
-            onClick={() =>
-              handleUpdate(task._id, { updatedTask, user: loggedinUser.username })
-            }
-          >
-            {task.status === "Completed" ? (
-              <PiHandsClapping />
-            ) : task.status === "In progress" ? (
-              <PiSmileyBold />
-            ) : task.status === "Overdue" ? (
-              <PiSmileySadBold />
-            ) : (
-              <PiThumbsUpBold />
-            )}
-            {task.reaction.length}
-          </IconButton>
+
         </Float>
         <Float placement={"bottom-end"} offsetX={8} offsetY={4}>
           <HoverCardRoot
