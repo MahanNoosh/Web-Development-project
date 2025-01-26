@@ -39,7 +39,7 @@ export const updateTask = async (req, res) => {
 
   try {
     let updatedTask;
-    if (user) {
+    if (user != null) {
       // If user is provided, update the 'reaction' field specifically
       updatedTask = await Task.findByIdAndUpdate(
         id,

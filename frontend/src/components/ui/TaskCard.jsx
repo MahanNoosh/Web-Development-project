@@ -110,8 +110,8 @@ const TaskCard = ({ task }) => {
     <Box
       shadow="lg"
       rounded="lg"
-      h={task.image ? { base: "350px", md: "400px", lg: "450px" } : "175px"}
-      w={{ base: "200px", sm: "300px", md: "400px", lg: "500px", xl: "600px" }}
+      h={task.image ? { base: "350px", md: "425px", lg: "500px", xl: "600px" } : { base: "175px", md: "200px", lg: "225px", xl: "250px" }}
+      w={{ base: "300px", md: "400px", lg: "500px", xl: "600px" }}
       overflow="hidden"
       position={"relative"}
       transition="all 0.3s"
@@ -133,7 +133,7 @@ const TaskCard = ({ task }) => {
         <Flex justifyContent="space-between" alignItems="center">
           <Heading
             as="h3"
-            size={"lg"}
+            size={{ base: "md", md: "lg", lg: "xl" }}
             textAlign="left"
             bgGradient="to-br"
             gradientFrom={useColorModeValue("red.500", "red.200")}
@@ -167,7 +167,14 @@ const TaskCard = ({ task }) => {
             <Text fontSize={"9px"}>{task.status}</Text>
           </Badge>
         </Flex>
-
+        <Text
+          mt={2}
+          fontSize={{ base: "10px", sm: "10px", md: "12px", lg: "14px", xl: "16px" }}
+          color="gray.500"
+          textAlign="left"
+        >
+          {task.description}
+        </Text>
         <HStack gap={1} justifyContent="flex-start">
           <DialogRoot motionPreset={"scale"} size={"sm"}>
             <DialogTrigger asChild>
@@ -221,7 +228,7 @@ const TaskCard = ({ task }) => {
                   <Button variant="outline">Cancel</Button>
                 </DialogActionTrigger>
                 <DialogActionTrigger asChild>
-                  <Button onClick={() => handleUpdate(task._id, updatedTask)}>
+                  <Button onClick={() => handleUpdate(task._id, {task: updatedTask, user: null})}>
                     Save
                   </Button>
                 </DialogActionTrigger>
@@ -278,7 +285,7 @@ const TaskCard = ({ task }) => {
             size={"xs"}
             _icon={{ color: useColorModeValue("blue.600", "blue.200") }}
             onClick={() =>
-              handleUpdate(task._id, { task, user: loggedinUser.username })
+              handleUpdate(task._id, { updatedTask, user: loggedinUser.username })
             }
           >
             {task.status === "Completed" ? (
