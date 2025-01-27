@@ -182,7 +182,7 @@ const TaskCard = ({ task }) => {
             size={"xs"}
             _icon={{ color: useColorModeValue("blue.600", "blue.200") }}
             onClick={() =>
-              handleUpdate(task._id, { updatedTask, user: loggedinUser.username })
+              handleUpdate(task._id, { updatedTask, user: loggedinUser.userid })
             }
           >
             {task.status === "Completed" ? (
@@ -194,11 +194,11 @@ const TaskCard = ({ task }) => {
             ) : (
               <PiThumbsUpBold />
             )}
-            {task.reaction.length}
+            { task.reaction && task.reaction.length}
           </IconButton>
         </Float>
         <Float placement={"bottom-end"} offsetX={8} offsetY={10}>
-        <HStack gap={0} justifyContent="flex-start">
+        <HStack gap={0}>
           <DialogRoot motionPreset={"scale"} size={"sm"}>
             <DialogTrigger asChild>
               <IconButton
