@@ -172,27 +172,26 @@ const SignupForm = ({
           setUserData({ ...userData, email: e.target.value.trim() })
         }
       />
-      <HStack>
+      <Switch
+        size={{ base: "xs", md: "md" }}
+        checked={tempData.hasMoreInfo}
+        onCheckedChange={({ checked }) => {
+          setTempData({ ...tempData, hasMoreInfo: checked });
+          if (!checked) {
+            setUserData((prevData) => ({
+              ...prevData,
+              discord: "",
+              linkedin: "",
+              github: "",
+              instagram: "",
+            }));
+          }
+        }}
+      >
         <Text fontSize={{ base: "xs", md: "md" }} color={"gray.500"}>
-          Open optional details
+          Optional details
         </Text>
-        <Switch
-          size={{ base: "xs", md: "md" }}
-          checked={tempData.hasMoreInfo}
-          onCheckedChange={({ checked }) => {
-            setTempData({ ...tempData, hasMoreInfo: checked });
-            if (!checked) {
-              setUserData((prevData) => ({
-                ...prevData,
-                discord: "",
-                linkedin: "",
-                github: "",
-                instagram: "",
-              }));
-            }
-          }}
-        />
-      </HStack>
+      </Switch>
       {tempData.hasMoreInfo && (
         <OptionalContactInfo userData={userData} setUserData={setUserData} />
       )}

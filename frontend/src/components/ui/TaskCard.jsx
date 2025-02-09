@@ -6,6 +6,7 @@ import {
   TbProgressX,
   TbProgressAlert,
 } from "react-icons/tb";
+import { HiCheck, HiX } from "react-icons/hi";
 import {
   PiHandsClapping,
   PiSmileySadBold,
@@ -29,7 +30,15 @@ import {
   AspectRatio,
   Float,
 } from "@chakra-ui/react";
+import {
+  MenuContent,
+  MenuItem,
+  MenuItemCommand,
+  MenuRoot,
+  MenuTrigger,
+} from "@/components/ui/menu";
 import { useColorModeValue } from "@/components/ui/color-mode";
+import { Switch } from "@/components/ui/switch";
 import { useState, useEffect } from "react";
 import { useTaskFeed } from "@/store/task";
 import { getUser as getCreator } from "/src/management/user";
@@ -110,7 +119,11 @@ const TaskCard = ({ task }) => {
     <Box
       shadow="lg"
       rounded="lg"
-      h={task.image ? { base: "350px", md: "425px", lg: "500px", xl: "600px" } : { base: "175px", md: "200px", lg: "225px", xl: "250px" }}
+      h={
+        task.image
+          ? { base: "350px", md: "425px", lg: "500px", xl: "600px" }
+          : { base: "175px", md: "200px", lg: "225px", xl: "250px" }
+      }
       w={{ base: "300px", md: "400px", lg: "500px", xl: "600px" }}
       overflow="hidden"
       position={"relative"}
@@ -169,7 +182,13 @@ const TaskCard = ({ task }) => {
         </Flex>
         <Text
           mt={2}
-          fontSize={{ base: "8px", sm: "10px", md: "12px", lg: "14px", xl: "16px" }}
+          fontSize={{
+            base: "8px",
+            sm: "10px",
+            md: "12px",
+            lg: "14px",
+            xl: "16px",
+          }}
           color="gray.500"
           textAlign="left"
         >
@@ -194,114 +213,189 @@ const TaskCard = ({ task }) => {
             ) : (
               <PiThumbsUpBold />
             )}
-            { task.reaction && task.reaction.length}
+            {task.reaction && task.reaction.length}
           </IconButton>
         </Float>
         <Float placement={"bottom-end"} offsetX={8} offsetY={10}>
-        <HStack gap={0}>
-          <DialogRoot motionPreset={"scale"} size={"sm"}>
-            <DialogTrigger asChild>
-              <IconButton
-                display={
-                  loggedinUser &&
-                  loggedinUser.username === creatorData.data.username
-                    ? "flex"
-                    : "none"
-                }
-                aria-label="Edit task"
-                variant="ghost"
-                size={"xs"}
-                _icon={{ color: useColorModeValue("blue.600", "blue.200") }}
-              >
-                <RiEditBoxLine />
-              </IconButton>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Update task</DialogTitle>
-              </DialogHeader>
-              <DialogBody>
-                <VStack gap={2}>
-                  <Input
-                    placeholder="task Name"
-                    name="name"
-                    value={updatedTask.name}
-                    onChange={(e) =>
-                      setUpdatedTask({
-                        ...updatedTask,
-                        name: e.target.value,
-                      })
-                    }
-                  />
-                  <Input
-                    placeholder="Image URL"
-                    name="image"
-                    value={updatedTask.image}
-                    onChange={(e) =>
-                      setUpdatedTask({
-                        ...updatedTask,
-                        image: e.target.value,
-                      })
-                    }
-                  />
-                </VStack>
-              </DialogBody>
-              <DialogFooter>
-                <DialogActionTrigger asChild>
-                  <Button variant="outline">Cancel</Button>
-                </DialogActionTrigger>
-                <DialogActionTrigger asChild>
-                  <Button onClick={() => handleUpdate(task._id, {task: updatedTask, user: null})}>
-                    Save
-                  </Button>
-                </DialogActionTrigger>
-              </DialogFooter>
-              <DialogCloseTrigger />
-            </DialogContent>
-          </DialogRoot>
-          <DialogRoot role="alertdialog">
-            <DialogTrigger asChild>
-              <IconButton
-                display={
-                  loggedinUser &&
-                  loggedinUser.username === creatorData.data.username
-                    ? "flex"
-                    : "none"
-                }
-                aria-label="Delete task"
-                variant="ghost"
-                size={"xs"}
-                _icon={{ color: useColorModeValue("red.600", "red.200") }}
-              >
-                <RiDeleteBin2Line />
-              </IconButton>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you sure?</DialogTitle>
-              </DialogHeader>
-              <DialogBody>
-                <p>
-                  This action cannot be undone. This will permanently delete
-                  this task and remove its data from our systems.
-                </p>
-              </DialogBody>
-              <DialogFooter>
-                <DialogActionTrigger asChild>
-                  <Button variant="outline">Cancel</Button>
-                </DialogActionTrigger>
-                <Button
-                  colorPalette="red"
-                  onClick={() => handleDelete(task._id)}
+          <HStack gap={0}>
+            <DialogRoot motionPreset={"scale"} size={"sm"}>
+              <DialogTrigger asChild>
+                <IconButton
+                  display={
+                    loggedinUser &&
+                    loggedinUser.username === creatorData.data.username
+                      ? "flex"
+                      : "none"
+                  }
+                  aria-label="Edit task"
+                  variant="plain"
+                  size={"xs"}
+                  _icon={{ color: useColorModeValue("blue.600", "blue.200") }}
                 >
-                  Delete
-                </Button>
-              </DialogFooter>
-              <DialogCloseTrigger />
-            </DialogContent>
-          </DialogRoot>
-        </HStack>
-
+                  <RiEditBoxLine />
+                </IconButton>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Update task</DialogTitle>
+                </DialogHeader>
+                <DialogBody>
+                  <VStack gap={2}>
+                    <Input
+                      placeholder="task Name"
+                      name="name"
+                      value={updatedTask.name}
+                      onChange={(e) =>
+                        setUpdatedTask({
+                          ...updatedTask,
+                          name: e.target.value,
+                        })
+                      }
+                    />
+                    <Input
+                      placeholder="Image URL"
+                      name="image"
+                      value={updatedTask.image}
+                      onChange={(e) =>
+                        setUpdatedTask({
+                          ...updatedTask,
+                          image: e.target.value,
+                        })
+                      }
+                    />
+                    <Input
+                      placeholder="Description"
+                      name="description"
+                      value={updatedTask.description}
+                      onChange={(e) =>
+                        setUpdatedTask({
+                          ...updatedTask,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                    <MenuRoot onFocusOutside={() => setOpen(false)}>
+                      <MenuTrigger asChild>
+                        <Button
+                          variant="plain"
+                          colorPalette={
+                            updatedTask.status === "Completed"
+                              ? "green"
+                              : updatedTask.status === "In progress"
+                              ? "orange"
+                              : updatedTask.status === "Overdue"
+                              ? "red"
+                              : "blue"
+                          }
+                        >
+                          {updatedTask.status === "Completed" ? (
+                            <TbProgressCheck size={12} />
+                          ) : updatedTask.status === "In progress" ? (
+                            <TbProgress size={12} />
+                          ) : updatedTask.status === "Overdue" ? (
+                            <TbProgressX size={12} />
+                          ) : (
+                            <TbProgressAlert size={12} />
+                          )}{" "}
+                          {updatedTask.status}
+                        </Button>
+                      </MenuTrigger>
+                      <MenuContent zIndex="max">
+                        <MenuItem value="Not started" onClick={() => setUpdatedTask({ ...updatedTask, status: "Not started" })}>
+                          Not started
+                        </MenuItem>
+                        <MenuItem value="In progress" onClick={() => setUpdatedTask({ ...updatedTask, status: "In progress" })}>
+                          In progress
+                        </MenuItem>
+                        <MenuItem value="Completed" onClick={() => setUpdatedTask({ ...updatedTask, status: "Completed" })}>
+                          Completed
+                        </MenuItem>
+                        <MenuItem value="Overdue" onClick={() => setUpdatedTask({ ...updatedTask, status: "Overdue" })}>
+                          Overdue
+                        </MenuItem>
+                      </MenuContent>
+                    </MenuRoot>
+                    <Switch
+                      size={{ base: "sm", md: "md" }}
+                      checked={updatedTask.isPublic}
+                      trackLabel={{
+                        //on: <LuEye color="black"/>,
+                        off: <HiX color="white" size={13} />,
+                      }}
+                      thumbLabel={{
+                        on: <HiCheck color="white" size={13} />,
+                        //off: <LuEyeOff color="black" />,
+                      }}
+                      onCheckedChange={({ checked }) => {
+                        setUpdatedTask({ ...updatedTask, isPublic: checked });
+                      }}
+                    >
+                      <Text>Share On Home Page</Text>
+                    </Switch>
+                  </VStack>
+                </DialogBody>
+                <DialogFooter>
+                  <DialogActionTrigger asChild>
+                    <Button variant="outline" onClick={() => setUpdatedTask( task )}>Cancel</Button>
+                  </DialogActionTrigger>
+                  <DialogActionTrigger asChild>
+                    <Button
+                      onClick={() =>
+                        handleUpdate(task._id, {
+                          task: updatedTask,
+                          user: null,
+                        })
+                      }
+                    >
+                      Save
+                    </Button>
+                  </DialogActionTrigger>
+                </DialogFooter>
+                <DialogCloseTrigger />
+              </DialogContent>
+            </DialogRoot>
+            <DialogRoot role="alertdialog">
+              <DialogTrigger asChild>
+                <IconButton
+                  display={
+                    loggedinUser &&
+                    loggedinUser.username === creatorData.data.username
+                      ? "flex"
+                      : "none"
+                  }
+                  aria-label="Delete task"
+                  variant="plain"
+                  size={"xs"}
+                  _icon={{ color: useColorModeValue("red.600", "red.200") }}
+                >
+                  <RiDeleteBin2Line />
+                </IconButton>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Are you sure?</DialogTitle>
+                </DialogHeader>
+                <DialogBody>
+                  <p>
+                    This action cannot be undone. This will permanently delete
+                    this task and remove its data from our systems.
+                  </p>
+                </DialogBody>
+                <DialogFooter>
+                  <DialogActionTrigger asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogActionTrigger>
+                  <Button
+                    colorPalette="red"
+                    onClick={() => handleDelete(task._id)}
+                  >
+                    Delete
+                  </Button>
+                </DialogFooter>
+                <DialogCloseTrigger />
+              </DialogContent>
+            </DialogRoot>
+          </HStack>
         </Float>
         <Float placement={"bottom-end"} offsetX={8} offsetY={4}>
           <HoverCardRoot
