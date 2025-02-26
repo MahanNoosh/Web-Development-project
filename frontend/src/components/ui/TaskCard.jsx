@@ -1,5 +1,8 @@
 import { RiDeleteBin2Line, RiEditBoxLine, RiMailFill } from "react-icons/ri";
 import { FaGithub, FaLinkedin, FaDiscord } from "react-icons/fa";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 import {
   TbProgressCheck,
   TbProgress,
@@ -29,6 +32,7 @@ import {
   Flex,
   AspectRatio,
   Float,
+  Textarea
 } from "@chakra-ui/react";
 import {
   MenuContent,
@@ -65,6 +69,7 @@ const TaskCard = ({ task }) => {
   const loggedinUser = useProfile((state) => state.loggedinUser);
   const bg = useColorModeValue("white", "gray.800");
   const [updatedTask, setUpdatedTask] = useState(task);
+  const [startDate, setStartDate] = useState(new Date());
   const { deleteTask, updateTask } = useTaskFeed();
   const [creatorData, setUser] = useState({
     success: false,
@@ -263,17 +268,20 @@ const TaskCard = ({ task }) => {
                         })
                       }
                     />
-                    <Input
-                      placeholder="Description"
-                      name="description"
-                      value={updatedTask.description}
-                      onChange={(e) =>
-                        setUpdatedTask({
-                          ...updatedTask,
-                          description: e.target.value,
-                        })
-                      }
+                    <Textarea
+                    resize= "none"
+                    placeholder="Description"
+                    name="description"
+                    size="sm"
+                    value={updatedTask.description}
+                    onChange={(e) =>
+                      setUpdatedTask({
+                        ...updatedTask,
+                        description: e.target.value.replace(/\n/g, ""),
+                      })
+                    }
                     />
+                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} showTimeSelect dateFormat="Pp" />
                     <MenuRoot onFocusOutside={() => setOpen(false)}>
                       <MenuTrigger asChild>
                         <Button
