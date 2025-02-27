@@ -3,6 +3,8 @@ import { FaGithub, FaLinkedin, FaDiscord } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import "@/styles/datepicker.css"
+
 import {
   TbProgressCheck,
   TbProgress,
@@ -281,7 +283,7 @@ const TaskCard = ({ task }) => {
                       })
                     }
                     />
-                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} showTimeSelect dateFormat="Pp" />
+                    <DatePicker className="custom-datepicker" selected={startDate} onChange={(date) => setStartDate(date)} showTimeSelect dateFormat="Pp" />
                     <MenuRoot onFocusOutside={() => setOpen(false)}>
                       <MenuTrigger asChild>
                         <Button
