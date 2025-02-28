@@ -12,6 +12,7 @@ import {
   TbProgressAlert,
 } from "react-icons/tb";
 import { HiCheck, HiX } from "react-icons/hi";
+import { FcHighPriority, FcLowPriority, FcMediumPriority } from "react-icons/fc";
 import {
   PiHandsClapping,
   PiSmileySadBold,
@@ -34,7 +35,8 @@ import {
   Flex,
   AspectRatio,
   Float,
-  Textarea
+  Textarea,
+  Container
 } from "@chakra-ui/react";
 import {
   MenuContent,
@@ -70,8 +72,8 @@ import {
 const TaskCard = ({ task }) => {
   const loggedinUser = useProfile((state) => state.loggedinUser);
   const bg = useColorModeValue("white", "gray.800");
+  const mode = useColorModeValue("light", "dark");
   const [updatedTask, setUpdatedTask] = useState(task);
-  const [startDate, setStartDate] = useState(new Date());
   const { deleteTask, updateTask } = useTaskFeed();
   const [creatorData, setUser] = useState({
     success: false,
@@ -201,6 +203,7 @@ const TaskCard = ({ task }) => {
         >
           {task.description}
         </Text>
+        <div className={"description-blocker--"+mode}/>
         <Float placement={"bottom-start"} offsetX={10} offsetY={9}>
           <IconButton
             aria-label="Motivate creator"
@@ -283,7 +286,79 @@ const TaskCard = ({ task }) => {
                       })
                     }
                     />
-                    <DatePicker className="custom-datepicker" selected={startDate} onChange={(date) => setStartDate(date)} showTimeSelect dateFormat="Pp" />
+                    <Flex w={"full"} gap={2} justifyContent={"space-between"}>
+                    <div className={"border--"+mode}>
+                    <HStack gap={0}>
+                      <Text
+                        pl={2}
+                        color="gray.500"
+                      >
+                        Deadline:
+                      </Text>
+                     <DatePicker className={"custom-datepicker--"+mode} selected={new Date(updatedTask.deadline)} onChange={(date) => setUpdatedTask({...updatedTask, deadline: new Date(date)})} showTimeSelect dateFormat="dd-MMM yyyy 'at' HH:mm" />
+                      </HStack>
+                    </div >
+                    <div className={"border--"+mode}>
+                    <HStack gap={0}>
+                      <Text
+                        pl={2}
+                        color="gray.500"
+                      >
+                        Priority:
+                      </Text>
+                    <MenuRoot onFocusOutside={() => setOpen(false)}>
+                      <MenuTrigger >
+                        <Button
+                          variant="plain"
+                          colorPalette={
+                            updatedTask.priority === "High"
+                              ? "red"
+                              : updatedTask.priority === "Medium"
+                              ? "yellow"
+                              : "green"
+                          }
+                        >
+                          {updatedTask.priority === "High" ? (
+                            <FcHighPriority size={12}/>
+                          ) : updatedTask.priority === "Medium" ? (
+                            <FcMediumPriority size={12} />
+                          ):(
+                            <FcLowPriority size={12} />
+                          )
+                          }{" "}
+                          {updatedTask.priority}
+                        </Button>
+                        </MenuTrigger>
+                      <MenuContent zIndex="max">
+                        <MenuItem value="High" onClick={() => setUpdatedTask({ ...updatedTask, priority: "High" })}>
+                          High
+                        </MenuItem>
+                        <MenuItem value="Medium" onClick={() => setUpdatedTask({ ...updatedTask, priority: "Medium" })}>
+                          Medium
+                        </MenuItem>
+                        <MenuItem value="Low" onClick={() => setUpdatedTask({ ...updatedTask, priority: "Low" })}>
+                          Low
+                        </MenuItem>
+                      </MenuContent>
+                    </MenuRoot>
+                    </HStack>
+                    </div>
+                    </Flex>
+                    <Flex w={"full"} gap={2} justifyContent={"space-between"}>
+                    <Input
+                      placeholder="Time needed (in minutes)"
+                      type="number"
+                      name="tags"
+                      value={updatedTask.duration}
+                    />
+                    <div className={"border--"+mode}>
+                    <HStack gap={0}>
+                      <Text
+                        pl={2}
+                        color="gray.500"
+                      >
+                        Status:
+                      </Text>
                     <MenuRoot onFocusOutside={() => setOpen(false)}>
                       <MenuTrigger asChild>
                         <Button
@@ -325,6 +400,9 @@ const TaskCard = ({ task }) => {
                         </MenuItem>
                       </MenuContent>
                     </MenuRoot>
+                    </HStack>
+                    </div>
+                    </Flex>
                     <Switch
                       size={{ base: "sm", md: "md" }}
                       checked={updatedTask.isPublic}

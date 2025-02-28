@@ -25,12 +25,10 @@ const taskSchema = mongoose.Schema(
     deadline: {
       type: Date,
     },
-    tag: {
-      type: String,
-    },
     priority: {
-      type: Number,
-      default: 0,
+      type: String,
+      enum: ["High", "Medium", "Low"],
+      default: "Medium"
     },
     reaction: {
       type: Array,
