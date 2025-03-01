@@ -68,6 +68,7 @@ import {
   HoverCardRoot,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { useMyTasks } from "@/store/myTask";
 
 const TaskCard = ({ task }) => {
   const loggedinUser = useProfile((state) => state.loggedinUser);
@@ -75,6 +76,7 @@ const TaskCard = ({ task }) => {
   const mode = useColorModeValue("light", "dark");
   const [updatedTask, setUpdatedTask] = useState(task);
   const { deleteTask, updateTask } = useTaskFeed();
+  const { deleteMyTask } = useMyTasks();
   const [creatorData, setUser] = useState({
     success: false,
     data: {},
@@ -89,7 +91,8 @@ const TaskCard = ({ task }) => {
   }, [task.creator]);
 
   const handleDelete = async (id) => {
-    const { success, message } = await deleteTask(id);
+    //const { success, message } = await deleteTask(id);
+    const { success, message } = await deleteMyTask(id);
     if (success) {
       toaster.create({
         title: "Success",

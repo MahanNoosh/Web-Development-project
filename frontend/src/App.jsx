@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box } from "@chakra-ui/react";
 import { Route, Routes } from "react-router-dom";
 import CreatePage from "./pages/CreatePage";
@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Signup from "./pages/SignUpPage";
 import Dashboard from "./pages/DashboardPage";
 import ProfileFetcher from "./components/profileFetcher";
+import MyTasksPage from "./pages/MyTasksPage";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/create" element={<CreatePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/mytasks" element={<MyTasksPage />} />
       </Routes>
     </Box>
   );

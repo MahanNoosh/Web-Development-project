@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import { useMyTasks } from "./myTask";
 
 export const useTaskFeed = create((set) => ({
   tasks: [],
@@ -35,7 +36,8 @@ export const useTaskFeed = create((set) => ({
   fetchTasks: async () => {
     try {
       const { data } = await axios.get("/api/tasks");
-      set({ tasks: data.data });
+
+      set({ tasks: data.data.filter(task => task.isPublic) });
     } catch (error) {
       console.error("Error fetching Tasks:", error);
     }
@@ -43,6 +45,7 @@ export const useTaskFeed = create((set) => ({
 
   deleteTask: async (id) => {
     try {
+      if(!success) return {success, message};
       const { data } = await axios.delete(`/api/tasks/${id}`);
       if (!data.success) return { success: false, message: data.message };
       set((state) => ({
@@ -66,7 +69,9 @@ export const useTaskFeed = create((set) => ({
       });
       if (!data.success) return { success: false, message: data.message };
       set((state) => ({
-        tasks: state.tasks.map((task) => (task._id === id ? data.data : task)),
+        tasks: state.tasks
+          .map((task) => (task._id === id ? data.task : task))
+          .filter((task) => task.isPublic),
       }));
       return { success: true, message: data.message };
     } catch (error) {

@@ -12,12 +12,12 @@
 }
 
 .border--light{
-    border-radius: 8px;
+    border-radius: 5px;
     border: rgb(228, 228, 231) 1px solid;
 }
 
 .border--dark{
-    border-radius: 8px;
+    border-radius: 5px;
     border: rgb(39, 39, 42) 1px solid;
 }
 

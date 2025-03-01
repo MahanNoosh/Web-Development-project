@@ -2,17 +2,16 @@ import { Container, VStack, Text } from "@chakra-ui/react";
 import { useColorModeValue } from "@/components/ui/color-mode";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useTaskFeed } from "@/store/task";
 import TaskCard from "@/components/ui/TaskCard";
+import { useMyTasks } from "@/store/myTask";
 import { useProfile } from "@/store/profile";
 
-const HomePage = () => {
-  const loggedinUser = useProfile((state) => state.loggedinUser);
-  let notEmpty = false;
-  const { fetchTasks, tasks } = useTaskFeed();
+const MyTasksPage = () => {
+const loggedinUser = useProfile((state) => state.loggedinUser);
+  const { fetchMyTasks, myTasks } = useMyTasks();
   useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
+    {loggedinUser && loggedinUser.first && fetchMyTasks(loggedinUser.first)};
+  }, [fetchMyTasks, loggedinUser]);
   return (
     <Container maxWidth={"1140px"} py={12}>
       <VStack gap={8}>
@@ -25,10 +24,12 @@ const HomePage = () => {
           bgClip={"text"}
           textAlign={"center"}
         >
-          Current Tasks
+          Your Tasks
         </Text>
-        {tasks.map((task) =>  <TaskCard key={task._id} task={task} />)}
-        {tasks.length == 0 && (
+        {myTasks && myTasks.map((task) => (
+          <TaskCard key={task._id} task={task} />
+        ))}
+        {myTasks.length == 0 && (
           <Text fontSize={{ base: "md", sm: "lg" }}>
             No Task found,{" "}
             <Link to={loggedinUser ? "/create" : "/login"}>
@@ -57,4 +58,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default MyTasksPage;

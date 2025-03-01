@@ -20,12 +20,14 @@ const Navbar = () => {
           sm: "row",
         }}
       >
+        <HStack gap={2} alignItems={"center"}>
         <Link to="/">
           <Text
             bgGradient="to-br"
             gradientFrom={useColorModeValue("blue.600", "blue.200")}
             gradientTo={useColorModeValue("red.600", "red.200")}
             bgClip={"text"}
+            pb={1}
             fontSize={{ base: "22px", sm: "28px" }}
             fontWeight="bold"
             textAlign="center"
@@ -33,7 +35,7 @@ const Navbar = () => {
             TaskShare
           </Text>
         </Link>
-        <HStack gap={2} alignItems={"center"}>
+        <ColorModeButton />
           <Link to={loggedinUser ? "/create" : "/login"}>
             <Button
               height={10}
@@ -49,7 +51,27 @@ const Navbar = () => {
               {isHovering === true ? <FiPlusCircle /> : <LuPlus />}
             </Button>
           </Link>
-          <ColorModeButton />
+          </HStack>
+          <HStack gap={2} alignItems={"center"}>
+          {loggedinUser && (
+            <Link to="/mytasks">
+              <Button
+                size={"lg"}
+                variant="subtle"
+                borderRadius={"full"}
+                bgGradient={"to-br"}
+                gradientFrom={useColorModeValue("blue.600", "blue.200")}
+                gradientTo={useColorModeValue("red.600", "red.200")}
+              >
+                <Text
+                  fontSize={"sm"}
+                  color={useColorModeValue("white", "black")}
+                >
+                  My Tasks
+                </Text>
+              </Button>
+            </Link>
+          )}
           <Link to={loggedinUser ? "/dashboard" : "/login"}>
             <Button
               size={"lg"}

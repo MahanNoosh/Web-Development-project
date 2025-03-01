@@ -52,6 +52,16 @@ const userSchema = new mongoose.Schema(
       sparse: true,
       set: (v) => (v === "" ? undefined : v),
     },
+    first: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Task",
+      default: null,
+    },
+    last: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Task",
+      default: null,
+    },
   },
   {
     timestamps: true,

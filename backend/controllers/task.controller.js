@@ -4,7 +4,21 @@ import mongoose from "mongoose";
 export const getAllTasks = async (_, res) => {
   try {
     const tasks = await Task.find({});
-    res.status(200).json({ success: true, data: tasks });
+    const publicTasks = tasks.filter(task => task.isPublic);
+    res.status(200).json({ success: true, data: publicTasks });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const getTask = async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ success: false, message: "Error loading task" });
+  }
+  try {
+    const task = await Task.findById(id);
+    res.status(200).json({ success: true, data: task });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
   }
