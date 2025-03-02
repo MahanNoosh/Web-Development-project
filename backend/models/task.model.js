@@ -49,17 +49,17 @@ const taskSchema = mongoose.Schema(
     image: {
       type: String,
     },
-    next:{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Task",
-      default: null,
-    },
     prev:{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Task",
       default: null,
 
-    }
+    },
+    next:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Task",
+      default: null,
+    },
   },
   {
     timestamps: true,

@@ -91,8 +91,7 @@ const TaskCard = ({ task }) => {
   }, [task.creator]);
 
   const handleDelete = async (id) => {
-    //const { success, message } = await deleteTask(id);
-    const { success, message } = await deleteMyTask(id);
+    const { success, message } = await deleteTask(id);
     if (success) {
       toaster.create({
         title: "Success",

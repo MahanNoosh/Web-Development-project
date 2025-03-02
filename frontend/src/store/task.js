@@ -6,13 +6,11 @@ export const useTaskFeed = create((set) => ({
   tasks: [],
 
   createTask: async (newTask) => {
-    const { isValidTask } = useTaskFeed.getState();
+    // Validate new task input
     if (!newTask.name) {
       return {
         success: false,
-        message:
-          error.response?.data?.message ||
-          "Please enter all the fields correctly",
+        message: "Please enter all the fields correctly",
       };
     }
 
@@ -36,22 +34,23 @@ export const useTaskFeed = create((set) => ({
   fetchTasks: async () => {
     try {
       const { data } = await axios.get("/api/tasks");
-
-      set({ tasks: data.data.filter(task => task.isPublic) });
+      set({ tasks: data.data.filter((task) => task.isPublic) });
     } catch (error) {
       console.error("Error fetching Tasks:", error);
     }
   },
 
-  deleteTask: async (id) => {
+  // Helper function to delete the task from DB
+  deleteTaskHelper: async (id) => {
     try {
-      if(!success) return {success, message};
       const { data } = await axios.delete(`/api/tasks/${id}`);
-      if (!data.success) return { success: false, message: data.message };
+      if (!data.success) {
+        return { success: false, message: data.message };
+      }
       set((state) => ({
         tasks: state.tasks.filter((task) => task._id !== id),
       }));
-      return { success: true, message: data.message };
+      return { success: true, message: "Task deleted from database successfully" };
     } catch (error) {
       return {
         success: false,
@@ -60,25 +59,29 @@ export const useTaskFeed = create((set) => ({
     }
   },
 
-  updateTask: async (id, updatedTask) => {
+  // Function to delete a task with validation and chain deletion
+  deleteTask: async (id) => {
     try {
-      const { data } = await axios.put(`/api/tasks/${id}`, updatedTask, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!data.success) return { success: false, message: data.message };
-      set((state) => ({
-        tasks: state.tasks
-          .map((task) => (task._id === id ? data.task : task))
-          .filter((task) => task.isPublic),
-      }));
-      return { success: true, message: data.message };
+      // Step 1: Update task links using deleteMyTask
+      const deleteMyTaskResult = await useMyTasks.getState().deleteMyTask(id); // Assuming `deleteMyTask` is in useMyTasks store
+      if (!deleteMyTaskResult.success) {
+        return { success: false, message: deleteMyTaskResult.message }; // Stop if deleteMyTask fails
+      }
+
+      // Step 2: Proceed to delete the task from the database
+      const deleteTaskResult = await useTaskFeed.getState().deleteTaskHelper(id); // Call deleteTaskHelper in useTaskFeed
+      if (!deleteTaskResult.success) {
+        // If deleteTaskHelper fails, restore the task links and do nothing
+        await useMyTasks.getState().restoreTaskLinks(id); // Rollback task links changes
+        return { success: false, message: deleteTaskResult.message }; // Task not deleted from DB
+      }
+
+      // If both operations succeed, return success
+      return { success: true, message: "Task deleted from database." };
+    
     } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Something went wrong.",
-      };
+      console.error("Error during task deletion:", error);
+      return { success: false, message: error.response?.data?.message || "Something went wrong during deletion." };
     }
   },
 }));
