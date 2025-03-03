@@ -3,7 +3,7 @@ import { FaGithub, FaLinkedin, FaDiscord } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
-import "@/styles/datepicker.css"
+import "@/styles/style.css"
 
 import {
   TbProgressCheck,
@@ -36,7 +36,6 @@ import {
   AspectRatio,
   Float,
   Textarea,
-  Container
 } from "@chakra-ui/react";
 import {
   MenuContent,
@@ -68,7 +67,6 @@ import {
   HoverCardRoot,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { useMyTasks } from "@/store/myTask";
 
 const TaskCard = ({ task }) => {
   const loggedinUser = useProfile((state) => state.loggedinUser);
@@ -76,7 +74,6 @@ const TaskCard = ({ task }) => {
   const mode = useColorModeValue("light", "dark");
   const [updatedTask, setUpdatedTask] = useState(task);
   const { deleteTask, updateTask } = useTaskFeed();
-  const { deleteMyTask } = useMyTasks();
   const [creatorData, setUser] = useState({
     success: false,
     data: {},

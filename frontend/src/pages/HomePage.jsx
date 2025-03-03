@@ -8,7 +8,6 @@ import { useProfile } from "@/store/profile";
 
 const HomePage = () => {
   const loggedinUser = useProfile((state) => state.loggedinUser);
-  let notEmpty = false;
   const { fetchTasks, tasks } = useTaskFeed();
   useEffect(() => {
     fetchTasks();

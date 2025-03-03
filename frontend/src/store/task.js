@@ -22,7 +22,7 @@ export const useTaskFeed = create((set) => ({
       });
 
       set((state) => ({ tasks: [...state.tasks, data] }));
-      return { success: true, message: "Task created successfully" };
+      return { success: true, message: "Task created successfully", task: data };
     } catch (error) {
       return {
         success: false,
@@ -82,6 +82,25 @@ export const useTaskFeed = create((set) => ({
     } catch (error) {
       console.error("Error during task deletion:", error);
       return { success: false, message: error.response?.data?.message || "Something went wrong during deletion." };
+    }
+  },
+  updateTask: async (id, updatedTask) => {
+    try {
+      const { data } = await axios.put(`/api/tasks/${id}`, updatedTask, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!data.success) return { success: false, message: data.message };
+      set((state) => ({
+        tasks: state.tasks.map((task) => (task._id === id ? data.data : task)),
+      }));
+      return { success: true, message: data.message };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || "Something went wrong.",
+      };
     }
   },
 }));

@@ -30,7 +30,7 @@ export const useMyTasks = create((set, getState) => ({
       const task = await getState().getTask(id);
       if (!task) return { success: false, message: "Task not found" };
 
-      const { updateTask } = getState(); // Get updateTask from state
+      const { updateMyTask } = getState(); // Get updateTask from state
       let pTask = task.prev ? await getState().getTask(task.prev) : null;
       let nTask = task.next ? await getState().getTask(task.next) : null;
 
@@ -44,11 +44,11 @@ export const useMyTasks = create((set, getState) => ({
 
       // Update previous and next tasks if necessary
       if (pTask) {
-        const result = await updateTask(pTask);
+        const result = await updateMyTask(pTask);
         if (!result.success) return result;
       }
       if (nTask) {
-        const result = await updateTask(nTask);
+        const result = await updateMyTask(nTask);
         if (!result.success) return result;
       }
 
@@ -67,7 +67,7 @@ export const useMyTasks = create((set, getState) => ({
     }
   },
 
-  updateTask: async (task) => {
+  updateMyTask: async (task) => {
     try {
       const response = await axios.put(
         `/api/tasks/${task._id}`,
@@ -115,8 +115,8 @@ export const useMyTasks = create((set, getState) => ({
       if (pTask && pTask.next === id) pTask.next = task._id;
       if (nTask && nTask.prev === id) nTask.prev = task._id;
 
-      if (pTask) await updateTask(pTask);
-      if (nTask) await updateTask(nTask);
+      if (pTask) await updateMyTask(pTask);
+      if (nTask) await updateMyTask(nTask);
 
       console.log("Task links restored successfully.");
     } catch (error) {

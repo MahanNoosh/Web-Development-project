@@ -29,6 +29,8 @@ const Signup = () => {
     discord: "",
     linkedin: "",
     github: "",
+    first: null,
+    last: null,
   });
   const [tempData, setTempData] = useState({
     confirmPassword: "",
@@ -72,6 +74,8 @@ const Signup = () => {
       linkedin: "",
       github: "",
       instagram: "",
+      first: null,
+      last: null,
     });
     setTempData({
       confirmPassword: "",
