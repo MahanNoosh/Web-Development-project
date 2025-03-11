@@ -89,33 +89,32 @@ export const deleteTask = async (req, res) => {
 export const fetchMyTasks = async (req, res) => {
   try {
     const { id } = req.params;
-    // Ensure the firstTaskId is a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ success: false, message: "Invalid task ID" });
     }
 
     const taskId = new mongoose.Types.ObjectId(id);
-    // Use aggregation to fetch all tasks in a linked chain for the user
+
     const tasks = await Task.aggregate([
       { $match: { _id: taskId } },
       {
         $graphLookup: {
           from: 'tasks',
-          startWith: '$next',
+          startWith: '$next',  
           connectFromField: 'next',
           connectToField: '_id',
           as: 'taskChain',
+          depthField: 'depth',
         },
       },
-      { $unwind: { path: '$taskChain', preserveNullAndEmptyArrays: true } },
-      {
-        $group: {
-          _id: null,
-          tasks: { $push: { $ifNull: ['$taskChain', '$$ROOT'] } },
-        },
+      { 
+        $project: { 
+          allTasks: { $concatArrays: [[ "$$ROOT" ], "$taskChain"] } 
+        } 
       },
-      { $unwind: '$tasks' },
-      { $replaceRoot: { newRoot: '$tasks' } },
+      { $unwind: "$allTasks" },
+      { $sort: { "allTasks.depth": 1 } },
+      { $replaceRoot: { newRoot: "$allTasks" } }
     ]);
 
     return res.status(200).json({ success: true, data: tasks, message: "Tasks fetched successfully" });
@@ -128,3 +127,4 @@ export const fetchMyTasks = async (req, res) => {
     });
   }
 };
+

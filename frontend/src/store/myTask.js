@@ -11,7 +11,6 @@ export const useMyTasks = create((set, getState) => ({
   
       // Fetch all tasks for the user starting from the first task
       const response = await axios.get(`/api/tasks/loadll/${firstTaskId}`);
-      console.log(response.data);
       if (response.data.success) {
         set({ myTasks: response.data.data });
       } else {

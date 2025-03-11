@@ -1,5 +1,6 @@
 import { RiDeleteBin2Line, RiEditBoxLine, RiMailFill } from "react-icons/ri";
 import { FaGithub, FaLinkedin, FaDiscord } from "react-icons/fa";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -154,6 +155,15 @@ const TaskCard = ({ task }) => {
       _hover={{ transform: "Scale(1.05)" }}
       bg={bg}
     >
+      <IconButton
+        right={"45%"}
+        position={"absolute"}
+        variant={"plain"}
+        zIndex={"max"}
+      >
+        <IoIosArrowUp /> 
+      </IconButton>
+
       {task.image && (
         <AspectRatio ratio={16 / 9}>
           <Image
@@ -575,6 +585,15 @@ const TaskCard = ({ task }) => {
           </HoverCardRoot>
         </Float>
       </Box>
+      <IconButton
+        right={"45%"}
+        top={"80%"}
+        position={"absolute"}
+        variant={"plain"}
+        zIndex={"max"}
+      >
+        <IoIosArrowDown />
+      </IconButton>
     </Box>
   );
 };
