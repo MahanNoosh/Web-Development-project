@@ -5,18 +5,21 @@ import {
   createTask,
   getAllTasks,
   getTask,
+  fetchMyTasks,
 } from "../controllers/task.controller.js";
 
-const pRouter = express.Router();
+const tRouter = express.Router();
 
-pRouter.get("/", getAllTasks);
+tRouter.get("/", getAllTasks);
 
-pRouter.post("/", createTask);
+tRouter.post("/", createTask);
 
-pRouter.put("/:id", updateTask);
+tRouter.put("/:id", updateTask);
 
-pRouter.get("/:id", getTask);
+tRouter.get("/:id", getTask);
 
-pRouter.delete("/:id", deleteTask);
+tRouter.get("/loadll/:id", fetchMyTasks);
 
-export default pRouter;
+tRouter.delete("/:id", deleteTask);
+
+export default tRouter;

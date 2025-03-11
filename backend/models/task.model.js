@@ -49,6 +49,10 @@ const taskSchema = mongoose.Schema(
     image: {
       type: String,
     },
+    tasksCount: {
+      type: Number,
+      default: 0,
+    },
     prev:{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Task",

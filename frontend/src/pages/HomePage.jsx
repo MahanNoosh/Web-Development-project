@@ -26,7 +26,9 @@ const HomePage = () => {
         >
           Current Tasks
         </Text>
-        {tasks.map((task) =>  <TaskCard key={task._id} task={task} />)}
+        {tasks.map((task, index) => (
+          <TaskCard key={task._id} task={tasks[tasks.length - 1 - index]} />
+        ))}
         {tasks.length == 0 && (
           <Text fontSize={{ base: "md", sm: "lg" }}>
             No Task found,{" "}

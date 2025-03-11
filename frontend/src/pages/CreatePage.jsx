@@ -8,7 +8,7 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "@/styles/style.css"
-
+import { useNavigate } from "react-router-dom";
 import {
   TbProgressCheck,
   TbProgress,
@@ -42,6 +42,7 @@ const CreatePage = () => {
   const loggedInUser = useProfile((state) => state.loggedinUser);
   const updateUser = useProfile((state) => state.updateUser);
   const getTask = useMyTasks((state) => state.getTask);
+  const navigate = useNavigate();
   const updateTask = useTaskFeed((state) => state.updateTask);
   const [newTask, setNewTask] = useState({
       name: "",
@@ -57,11 +58,10 @@ const CreatePage = () => {
       image: "",
   });
   useEffect(() => {
-    setNewTask({
-      ...newTask,
+    setNewTask(prevState => ({
+      ...prevState,
       prev: loggedInUser ? loggedInUser.last : null,
-      creator: loggedInUser ? loggedInUser.userid : "",
-    })
+    }));
   }, [loggedInUser]);
   const { createTask } = useTaskFeed();
   const mode = useColorModeValue("light", "dark");
@@ -83,6 +83,7 @@ const CreatePage = () => {
         await updateTask(lastTask._id, {task: {...lastTask, next: task.data._id}, user: null});
         await updateUser(loggedInUser._id, {...loggedInUser, last: task.data._id});
       }
+      navigate("/mytasks");
     } else {
       toaster.create({
         title: "Error",
@@ -99,10 +100,10 @@ const CreatePage = () => {
       deadline: Date(),
       priority: "High",
       duration: "",
-      prev: loggedInUser.last,
+      prev: loggedInUser ? loggedInUser.last : null,
+      creator: loggedInUser ? loggedInUser.userid : "",
       next: null,
       image: "",
-      creator: loggedInUser.userid,
     });
   };
   return (

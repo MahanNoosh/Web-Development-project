@@ -62,7 +62,7 @@ export const updateTask = async (req, res) => {
       );
     } else {
       // If no user, update the task fields
-      updatedTask = await Task.findByIdAndUpdate(id, task, { new: true });
+      updatedTask = await Task.findByIdAndUpdate(id, {...task, next: task.next ? task.next : null, prev: task.prev ? task.prev : null}, { new: true });
     }
 
     res.status(200).json({ success: true, data: updatedTask });
@@ -83,5 +83,48 @@ export const deleteTask = async (req, res) => {
       .json({ success: true, message: "Task deleted successfully" });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const fetchMyTasks = async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Ensure the firstTaskId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ success: false, message: "Invalid task ID" });
+    }
+
+    const taskId = new mongoose.Types.ObjectId(id);
+    // Use aggregation to fetch all tasks in a linked chain for the user
+    const tasks = await Task.aggregate([
+      { $match: { _id: taskId } },
+      {
+        $graphLookup: {
+          from: 'tasks',
+          startWith: '$next',
+          connectFromField: 'next',
+          connectToField: '_id',
+          as: 'taskChain',
+        },
+      },
+      { $unwind: { path: '$taskChain', preserveNullAndEmptyArrays: true } },
+      {
+        $group: {
+          _id: null,
+          tasks: { $push: { $ifNull: ['$taskChain', '$$ROOT'] } },
+        },
+      },
+      { $unwind: '$tasks' },
+      { $replaceRoot: { newRoot: '$tasks' } },
+    ]);
+
+    return res.status(200).json({ success: true, data: tasks, message: "Tasks fetched successfully" });
+  } catch (error) {
+    console.error("Error fetching tasks:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching tasks",
+      error: error.message || error,
+    });
   }
 };

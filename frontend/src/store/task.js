@@ -77,7 +77,7 @@ export const useTaskFeed = create((set) => ({
       }
 
       // If both operations succeed, return success
-      return { success: true, message: "Task deleted from database." };
+      return { success: true, message: "Task deleted from database.",isEmpty: deleteMyTaskResult.isEmpty, head: deleteMyTaskResult.head, tail: deleteMyTaskResult.tail };
     
     } catch (error) {
       console.error("Error during task deletion:", error);
@@ -95,7 +95,7 @@ export const useTaskFeed = create((set) => ({
       set((state) => ({
         tasks: state.tasks.map((task) => (task._id === id ? data.data : task)),
       }));
-      return { success: true, message: data.message };
+      return { success: true, message: data.message, task: data.data };
     } catch (error) {
       return {
         success: false,

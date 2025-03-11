@@ -441,9 +441,7 @@ const OptionalContactInfo = ({ userData, setUserData }) => {
         name="github"
         value={userData.github}
         onChange={(e) =>
-          userData.github === ""
-            ? setUserData({ ...userData, github: undefined })
-            : setUserData({ ...userData, github: e.target.value.trim() })
+          setUserData({ ...userData, github: e.target.value.trim() })
         }
       />
       <Input

@@ -348,7 +348,7 @@ function validateDiscord(discord) {
   return re.test(String(discord));
 }
 function validateInstagram(instagram) {
-  const re = /^[a-z0-9]+$/;
+  const re = /^[a-zA-Z0-9_-]+$/;
   return re.test(String(instagram));
 }
 

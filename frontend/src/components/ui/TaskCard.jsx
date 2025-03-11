@@ -50,6 +50,7 @@ import { useState, useEffect } from "react";
 import { useTaskFeed } from "@/store/task";
 import { getUser as getCreator } from "/src/management/user";
 import { useProfile } from "@/store/profile";
+import { useMyTasks } from "@/store/myTask";
 import {
   DialogBody,
   DialogCloseTrigger,
@@ -70,10 +71,12 @@ import {
 
 const TaskCard = ({ task }) => {
   const loggedinUser = useProfile((state) => state.loggedinUser);
+  const updateUser = useProfile((state) => state.updateUser);
   const bg = useColorModeValue("white", "gray.800");
   const mode = useColorModeValue("light", "dark");
   const [updatedTask, setUpdatedTask] = useState(task);
   const { deleteTask, updateTask } = useTaskFeed();
+  const { updateMyTasks } = useMyTasks();
   const [creatorData, setUser] = useState({
     success: false,
     data: {},
@@ -88,7 +91,7 @@ const TaskCard = ({ task }) => {
   }, [task.creator]);
 
   const handleDelete = async (id) => {
-    const { success, message } = await deleteTask(id);
+    const { success, message,isEmpty, head, tail } = await deleteTask(id);
     if (success) {
       toaster.create({
         title: "Success",
@@ -96,6 +99,16 @@ const TaskCard = ({ task }) => {
         type: "success",
         description: message,
       });
+      if(isEmpty){
+        await updateUser(loggedinUser._id, {...loggedinUser, first: null, last: null});
+      }else{
+        if(head){
+          await updateUser(loggedinUser._id, {...loggedinUser, first: head._id});
+        }
+        if(tail){
+          await updateUser(loggedinUser._id, {...loggedinUser, last: tail._id});
+        }
+      }
     } else {
       toaster.create({
         title: "Error",
@@ -106,7 +119,7 @@ const TaskCard = ({ task }) => {
     }
   };
   const handleUpdate = async (id, updatedtask) => {
-    const { success, message } = await updateTask(id, updatedtask);
+    const { success, message, task } = await updateTask(id, updatedtask);
     if (success) {
       toaster.create({
         title: "Success",
@@ -114,6 +127,8 @@ const TaskCard = ({ task }) => {
         type: "success",
         description: message,
       });
+      console.log(task);
+      await updateMyTasks(task);
     } else {
       toaster.create({
         title: "Error",
