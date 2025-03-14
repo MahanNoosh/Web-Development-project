@@ -64,17 +64,29 @@
    border: none !important;
 }
 
-.description-blocker--dark,
-.description-blocker--light{
+.description-blocker--dark--no-image,
+.description-blocker--light--no-image,
+.description-blocker--dark--image,
+.description-blocker--light--image{
     position: absolute;
     right: 0;
     top: 0;
     width: 100%;
     height: 100%;
 }
-.description-blocker--light{
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 70%, rgb(255, 255, 255) 70%) !important;
+
+.description-blocker--light--no-image{
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 66%, rgb(255, 255, 255) 76%) !important;
 }
-.description-blocker--dark{
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 70%, rgb(39, 39, 42) 70%) !important;
+
+.description-blocker--light--image{
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 86%, rgb(255, 255, 255) 88%) !important;
+}
+
+.description-blocker--dark--no-image{
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 66%, rgb(39, 39, 42) 76%) !important;
+}
+
+.description-blocker--dark--image{
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 86%, rgb(39, 39, 42) 88%) !important;
 }

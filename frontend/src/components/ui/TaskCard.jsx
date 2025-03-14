@@ -75,9 +75,10 @@ const TaskCard = ({ task }) => {
   const updateUser = useProfile((state) => state.updateUser);
   const bg = useColorModeValue("white", "gray.800");
   const mode = useColorModeValue("light", "dark");
+  const image = task.image ? "image" : "no-image";
   const [updatedTask, setUpdatedTask] = useState(task);
   const { deleteTask, updateTask } = useTaskFeed();
-  const { updateMyTasks } = useMyTasks();
+  const { updateMyTasks, moveTaskUp } = useMyTasks();
   const [creatorData, setUser] = useState({
     success: false,
     data: {},
@@ -119,6 +120,26 @@ const TaskCard = ({ task }) => {
       });
     }
   };
+
+  const moveUp = async (id) => {
+    const { success, message} = await moveTaskUp(id);
+    if (success) {
+      toaster.create({
+        title: "Success",
+        duration: 2000,
+        type: "success",
+        description: message,
+      });
+    } else {
+      toaster.create({
+        title: "Error",
+        duration: 2000,
+        type: "error",
+        description: message,
+      });
+    }
+  };
+
   const handleUpdate = async (id, updatedtask) => {
     const { success, message, task } = await updateTask(id, updatedtask);
     if (success) {
@@ -128,7 +149,6 @@ const TaskCard = ({ task }) => {
         type: "success",
         description: message,
       });
-      console.log(task);
       await updateMyTasks(task);
     } else {
       toaster.create({
@@ -157,9 +177,11 @@ const TaskCard = ({ task }) => {
     >
       <IconButton
         right={"45%"}
+        size={"xs"}
         position={"absolute"}
         variant={"plain"}
         zIndex={"max"}
+        onClick={() => moveUp(task._id)}
       >
         <IoIosArrowUp /> 
       </IconButton>
@@ -227,7 +249,7 @@ const TaskCard = ({ task }) => {
         >
           {task.description}
         </Text>
-        <div className={"description-blocker--"+mode}/>
+        <div className={`description-blocker--${mode}--${image}`}/>
         <Float placement={"bottom-start"} offsetX={10} offsetY={9}>
           <IconButton
             aria-label="Motivate creator"
@@ -319,7 +341,7 @@ const TaskCard = ({ task }) => {
                       >
                         Deadline:
                       </Text>
-                     <DatePicker className={"custom-datepicker--"+mode} selected={new Date(updatedTask.deadline)} onChange={(date) => setUpdatedTask({...updatedTask, deadline: new Date(date)})} showTimeSelect dateFormat="dd-MMM yyyy 'at' HH:mm" />
+                     <DatePicker className={`custom-datepicker--${mode}`} selected={new Date(updatedTask.deadline)} onChange={(date) => setUpdatedTask({...updatedTask, deadline: new Date(date)})} showTimeSelect dateFormat="dd-MMM yyyy 'at' HH:mm" />
                       </HStack>
                     </div >
                     <div className={"border--"+mode}>
@@ -587,7 +609,8 @@ const TaskCard = ({ task }) => {
       </Box>
       <IconButton
         right={"45%"}
-        top={"80%"}
+        size={"xs"}
+        top={task.image?"91%":"82%"}
         position={"absolute"}
         variant={"plain"}
         zIndex={"max"}
