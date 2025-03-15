@@ -156,50 +156,54 @@ export const useMyTasks = create((set, getState) => ({
     }
   },
   moveTaskUp: async (id) => {
-    console.log("0")
     try {
-      console.log("1")
       let fTask = await getState().getTask(id);
       let sTask = fTask.prev ? await getState().getTask(fTask.prev) : null;
-      console.log("2")
       if (!sTask) {
-        return;
+        return { success: true, message: "Already at the top" };
       }
-      console.log("3")
+  
       let pTask = sTask.prev ? await getState().getTask(sTask.prev) : null;
       let nTask = fTask.next ? await getState().getTask(fTask.next) : null;
+      let firstTask = null;
+      let lastTask = null;
+  
       const { updateTaskHelper } = await getState(); // Get updateTask from state
-      console.log("4")
-      //fast ui update
+  
+      // 🔥 Fast UI Update
       let newMyTasks = [...getState().myTasks];
       let index = newMyTasks.findIndex((task) => task._id === fTask._id);
       [newMyTasks[index], newMyTasks[index - 1]] = [newMyTasks[index - 1], newMyTasks[index]];
-      console.log("5")
       set(() => ({ myTasks: newMyTasks }));
-      //db update
+  
+      // 🔄 Database Update
       fTask.prev = pTask ? pTask._id : null;
-      fTask.next = sTask ? sTask._id : null;
-      console.log("6")
+      fTask.next = sTask._id;
       let result = await updateTaskHelper(fTask);
       if (!result.success) return result;
+  
       sTask.prev = fTask._id;
-      sTask.next = nTask._id;
+      sTask.next = nTask ? nTask._id : null;
       result = await updateTaskHelper(sTask);
       if (!result.success) return result;
-      console.log("7")
-      if (nTask) {
-        nTask.prev = sTask._id;
-        result = await updateTaskHelper(nTask);
-        if (!result.success) return result;
-      }
-      console.log("8")
+  
       if (pTask) {
         pTask.next = fTask._id;
         result = await updateTaskHelper(pTask);
         if (!result.success) return result;
+      } else {
+        firstTask = fTask;
       }
-      console.log("9")
-      return {success: true, message: "moved up"}
+  
+      if (nTask) {
+        nTask.prev = sTask._id;
+        result = await updateTaskHelper(nTask);
+        if (!result.success) return result;
+      } else {
+        lastTask = sTask;
+      }
+  
+      return { success: true, message: "Moved up", head: firstTask, tail: lastTask };
     } catch (error) {
       console.error("Error moving task:", error);
       return {
@@ -208,4 +212,62 @@ export const useMyTasks = create((set, getState) => ({
       };
     }
   },
+  
+  moveTaskDown: async (id) => {
+    try {
+      let fTask = await getState().getTask(id);
+      let nTask = fTask.next ? await getState().getTask(fTask.next) : null;
+      if (!nTask) {
+        return { success: true, message: "Already at the bottom" };
+      }
+      
+      let pTask = fTask.prev ? await getState().getTask(fTask.prev) : null;
+      let nnTask = nTask.next ? await getState().getTask(nTask.next) : null;
+      let firstTask = null;
+      let lastTask = null;
+  
+      const { updateTaskHelper } = await getState(); // Get updateTask from state
+  
+      // Fast UI Update
+      let newMyTasks = [...getState().myTasks];
+      let index = newMyTasks.findIndex((task) => task._id === fTask._id);
+      [newMyTasks[index], newMyTasks[index + 1]] = [newMyTasks[index + 1], newMyTasks[index]];
+      set(() => ({ myTasks: newMyTasks }));
+  
+      // Database Update
+      fTask.next = nnTask ? nnTask._id : null;
+      fTask.prev = nTask._id;
+      let result = await updateTaskHelper(fTask);
+      if (!result.success) return result;
+  
+      nTask.next = fTask._id;
+      nTask.prev = pTask ? pTask._id : null;
+      result = await updateTaskHelper(nTask);
+      if (!result.success) return result;
+  
+      if (pTask) {
+        pTask.next = nTask._id;
+        result = await updateTaskHelper(pTask);
+        if (!result.success) return result;
+      } else {
+        firstTask = nTask;
+      }
+  
+      if (nnTask) {
+        nnTask.prev = fTask._id;
+        result = await updateTaskHelper(nnTask);
+        if (!result.success) return result;
+      } else {
+        lastTask = fTask;
+      }
+  
+      return { success: true, message: "Moved down", head: firstTask, tail: lastTask };
+    } catch (error) {
+      console.error("Error moving task:", error);
+      return {
+        success: false,
+        message: error.response?.data?.message || "Error moving task",
+      };
+    }
+  },  
 }));

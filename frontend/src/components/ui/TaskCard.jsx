@@ -78,7 +78,7 @@ const TaskCard = ({ task }) => {
   const image = task.image ? "image" : "no-image";
   const [updatedTask, setUpdatedTask] = useState(task);
   const { deleteTask, updateTask } = useTaskFeed();
-  const { updateMyTasks, moveTaskUp } = useMyTasks();
+  const { updateMyTasks, moveTaskUp, moveTaskDown } = useMyTasks();
   const [creatorData, setUser] = useState({
     success: false,
     data: {},
@@ -122,7 +122,7 @@ const TaskCard = ({ task }) => {
   };
 
   const moveUp = async (id) => {
-    const { success, message} = await moveTaskUp(id);
+    const { success, message, head, tail } = await moveTaskUp(id);
     if (success) {
       toaster.create({
         title: "Success",
@@ -130,6 +130,12 @@ const TaskCard = ({ task }) => {
         type: "success",
         description: message,
       });
+      if (head) {
+        await updateUser(loggedinUser._id, { ...loggedinUser, first: head._id });
+      }
+      if (tail) {
+        await updateUser(loggedinUser._id, { ...loggedinUser, last: tail._id });
+      }
     } else {
       toaster.create({
         title: "Error",
@@ -139,7 +145,32 @@ const TaskCard = ({ task }) => {
       });
     }
   };
-
+  
+  const moveDown = async (id) => {
+    const { success, message, head, tail } = await moveTaskDown(id);
+    if (success) {
+      toaster.create({
+        title: "Success",
+        duration: 2000,
+        type: "success",
+        description: message,
+      });
+      if (head) {
+        await updateUser(loggedinUser._id, { ...loggedinUser, first: head._id });
+      }
+      if (tail) {
+        await updateUser(loggedinUser._id, { ...loggedinUser, last: tail._id });
+      }
+    } else {
+      toaster.create({
+        title: "Error",
+        duration: 2000,
+        type: "error",
+        description: message,
+      });
+    }
+  };
+  
   const handleUpdate = async (id, updatedtask) => {
     const { success, message, task } = await updateTask(id, updatedtask);
     if (success) {
@@ -180,10 +211,10 @@ const TaskCard = ({ task }) => {
         size={"xs"}
         position={"absolute"}
         variant={"plain"}
-        zIndex={"max"}
+        zIndex={"999"}
         onClick={() => moveUp(task._id)}
       >
-        <IoIosArrowUp /> 
+        <IoIosArrowUp strokeWidth={15} stroke={useColorModeValue("white", "gray")} fill={useColorModeValue("gray", "white")} /> 
       </IconButton>
 
       {task.image && (
@@ -613,9 +644,10 @@ const TaskCard = ({ task }) => {
         top={task.image?"91%":"82%"}
         position={"absolute"}
         variant={"plain"}
-        zIndex={"max"}
+        zIndex={"999"}
+        onClick={() => moveDown(task._id)}
       >
-        <IoIosArrowDown />
+        <IoIosArrowDown strokeWidth={15} stroke={useColorModeValue("white", "gray")} fill={useColorModeValue("gray", "white")}/>
       </IconButton>
     </Box>
   );

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useColorModeValue } from "@/components/ui/color-mode";
 import { useProfile } from "@/store/profile";
 import { useState } from "react";
 import { checkPassword } from "@/management/user";
@@ -6,8 +7,11 @@ import {
   Container,
   Input,
   Text,
+  Box,
   VStack,
   Button,
+  Heading,
+  Flex,
   HStack,
   useDialog,
 } from "@chakra-ui/react";
@@ -250,174 +254,215 @@ const Dashboard = () => {
   };
 
   return (
-    <Container>
-      <DialogRoot role="alertdialog">
-        <DialogTrigger asChild>
-          <Button>Delete Acocount</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Are you sure?</DialogTitle>
-          </DialogHeader>
-          <DialogBody>
-            <VStack gap={5}>
-              <p>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our systems.
-              </p>
-              <PasswordInput
-                size={{ base: "md", md: "xl" }}
-                placeholder="Enter Your Password"
-                name="password"
-                value={tempData.currentPassword}
-                onChange={(e) =>
-                  setTempData({
-                    ...tempData,
-                    currentPassword: e.target.value.trim(),
-                  })
-                }
-              />
-            </VStack>
-          </DialogBody>
-          <DialogFooter>
-            <DialogActionTrigger asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogActionTrigger>
-            <Button onClick={handleDeleteAccount} colorPalette="red">
-              Delete account
-            </Button>
-          </DialogFooter>
-          <DialogCloseTrigger />
-        </DialogContent>
-      </DialogRoot>
-
-      <DialogRoot role="alertdialog" motionPreset={"slideInBottom"} size={"sm"}>
-        <DialogTrigger asChild>
-          <Button>Logout</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Are you sure?</DialogTitle>
-          </DialogHeader>
-          <DialogBody>
-            <p>you will have to login again to access your account</p>
-          </DialogBody>
-          <DialogFooter>
-            <DialogActionTrigger asChild>
-              <Button>Cancel</Button>
-            </DialogActionTrigger>
-            <Button variant="subtle" onClick={handleLogout}>
-              Logout
-            </Button>
-          </DialogFooter>
-          <DialogCloseTrigger />
-        </DialogContent>
-      </DialogRoot>
-      <DialogRoot motionPreset={"scale"} size={"sm"}>
-        <DialogTrigger asChild>
-          <Button>change password</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Change Password</DialogTitle>
-          </DialogHeader>
-          <DialogBody>
-            <VStack gap={2}>
-              <PasswordInput
-                size={{ base: "md", md: "xl" }}
-                placeholder="Current Password"
-                name="password"
-                value={tempData.currentPassword}
-                onChange={(e) =>
-                  setTempData({
-                    ...tempData,
-                    currentPassword: e.target.value.trim(),
-                  })
-                }
-              />
-              <PasswordInput
-                size={{ base: "md", md: "xl" }}
-                placeholder="New Password"
-                name="password"
-                value={tempData.newPassword}
-                onChange={(e) =>
-                  setTempData({
-                    ...tempData,
-                    newPassword: e.target.value.trim(),
-                  })
-                }
-              />
-              <Input
-                size={{ base: "md", md: "xl" }}
-                placeholder="Confirm Password"
-                name="password"
-                type="password"
-                value={tempData.confirmPassword}
-                onChange={(e) =>
-                  setTempData({
-                    ...tempData,
-                    confirmPassword: e.target.value.trim(),
-                  })
-                }
-              />
-            </VStack>
-          </DialogBody>
-          <DialogFooter>
-            <DialogActionTrigger asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogActionTrigger>
-            <DialogActionTrigger asChild>
-              <Button onClick={changePasswordHelper}>Save</Button>
-            </DialogActionTrigger>
-          </DialogFooter>
-          <DialogCloseTrigger />
-        </DialogContent>
-      </DialogRoot>
-      <VStack>
-        <Input
-          disabled={true}
-          size={{ base: "md", md: "xl" }}
-          name="name"
-          value={userData.name}
-          onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-        />
-        <Input
-          disabled={true}
-          size={{ base: "md", md: "xl" }}
-          name="username"
-          value={userData.username}
-          onChange={(e) =>
-            setUserData({
-              ...userData,
-              username: e.target.value.trim(),
-            })
-          }
-        />
-        <Input
-          size={{ base: "md", md: "xl" }}
-          placeholder="Email Address"
-          name="email"
-          value={userData.email}
-          onChange={(e) =>
-            setUserData({ ...userData, email: e.target.value.trim() })
-          }
-        />
-        <OptionalContactInfo userData={userData} setUserData={setUserData} />
-        <Checkbox
-          size={{ base: "xs", md: "md" }}
-          checked={tempData.termsAccepted}
-          onCheckedChange={({ checked }) =>
-            setTempData({ ...tempData, termsAccepted: checked })
-          }
-        >
-          <Text fontSize={{ base: "10px", md: "13px" }}>
-            I confirm the information is accurate and understand the legal
-            consequences of providing false details.
+    <Container maxW={"xl"} py={12}>
+      <VStack gap={8}>
+        <Heading as={"h1"} size={"2xl"} textAlign={"center"} mb={8}>
+          <Text
+            bgGradient="to-br"
+            gradientFrom={useColorModeValue("blue.600", "blue.200")}
+            gradientTo={useColorModeValue("purple.600", "purple.200")}
+            bgClip={"text"}
+            fontSize={{ base: "22px", sm: "28px" }}
+            fontWeight="bold"
+            textAlign="center"
+          >
+            Dashboard
           </Text>
-        </Checkbox>
-        <Button onClick={handleEdit} w={"full"}>
-          update
-        </Button>
+        </Heading>
+        <Box
+          width={{ base: "300px", sm: "500px", md: "600px" }}
+          p={6}
+          bg={useColorModeValue("white", "black")}
+          rounded={"lg"}
+          shadow={"md"}
+        >
+          <VStack>
+            <Input
+              disabled={true}
+              size={{ base: "md", md: "xl" }}
+              name="name"
+              value={userData.name}
+              onChange={(e) =>
+                setUserData({ ...userData, name: e.target.value })
+              }
+            />
+            <Input
+              disabled={true}
+              size={{ base: "md", md: "xl" }}
+              name="username"
+              value={userData.username}
+              onChange={(e) =>
+                setUserData({
+                  ...userData,
+                  username: e.target.value.trim(),
+                })
+              }
+            />
+            <Input
+              size={{ base: "md", md: "xl" }}
+              placeholder="Email Address"
+              name="email"
+              value={userData.email}
+              onChange={(e) =>
+                setUserData({ ...userData, email: e.target.value.trim() })
+              }
+            />
+            <OptionalContactInfo
+              userData={userData}
+              setUserData={setUserData}
+            />
+            <Checkbox
+              size={{ base: "xs", md: "md" }}
+              checked={tempData.termsAccepted}
+              onCheckedChange={({ checked }) =>
+                setTempData({ ...tempData, termsAccepted: checked })
+              }
+            >
+              <Text fontSize={{ base: "10px", md: "13px" }}>
+                I confirm the information is accurate and understand the legal
+                consequences of providing false details.
+              </Text>
+            </Checkbox>
+            <Button onClick={handleEdit} w={"full"}>
+              update
+            </Button>
+          </VStack>
+        </Box>
+        <Box
+          width={{ base: "300px", sm: "500px", md: "600px" }}
+          p={6}
+          bg={useColorModeValue("white", "black")}
+          rounded={"lg"}
+          shadow={"md"}
+        >
+          <Flex justifyContent={"space-between"}>
+            <DialogRoot
+              role="alertdialog"
+              motionPreset={"slideInBottom"}
+              size={"sm"}
+            >
+              <DialogTrigger asChild>
+                <Button variant={"outline"}>Logout</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Are you sure?</DialogTitle>
+                </DialogHeader>
+                <DialogBody>
+                  <p>you will have to login again to access your account</p>
+                </DialogBody>
+                <DialogFooter>
+                  <DialogActionTrigger asChild>
+                    <Button>Cancel</Button>
+                  </DialogActionTrigger>
+                  <Button variant="subtle" onClick={handleLogout}>
+                    Logout
+                  </Button>
+                </DialogFooter>
+                <DialogCloseTrigger />
+              </DialogContent>
+            </DialogRoot>
+            <DialogRoot motionPreset={"scale"} size={"sm"}>
+              <DialogTrigger asChild>
+                <Button variant={"outline"}>change password</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Change Password</DialogTitle>
+                </DialogHeader>
+                <DialogBody>
+                  <VStack gap={2}>
+                    <PasswordInput
+                      size={{ base: "md", md: "xl" }}
+                      placeholder="Current Password"
+                      name="password"
+                      value={tempData.currentPassword}
+                      onChange={(e) =>
+                        setTempData({
+                          ...tempData,
+                          currentPassword: e.target.value.trim(),
+                        })
+                      }
+                    />
+                    <PasswordInput
+                      size={{ base: "md", md: "xl" }}
+                      placeholder="New Password"
+                      name="password"
+                      value={tempData.newPassword}
+                      onChange={(e) =>
+                        setTempData({
+                          ...tempData,
+                          newPassword: e.target.value.trim(),
+                        })
+                      }
+                    />
+                    <Input
+                      size={{ base: "md", md: "xl" }}
+                      placeholder="Confirm Password"
+                      name="password"
+                      type="password"
+                      value={tempData.confirmPassword}
+                      onChange={(e) =>
+                        setTempData({
+                          ...tempData,
+                          confirmPassword: e.target.value.trim(),
+                        })
+                      }
+                    />
+                  </VStack>
+                </DialogBody>
+                <DialogFooter>
+                  <DialogActionTrigger asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogActionTrigger>
+                  <DialogActionTrigger asChild>
+                    <Button onClick={changePasswordHelper}>Save</Button>
+                  </DialogActionTrigger>
+                </DialogFooter>
+                <DialogCloseTrigger />
+              </DialogContent>
+            </DialogRoot>
+            <DialogRoot role="alertdialog">
+              <DialogTrigger asChild>
+                <Button variant={"outline"} colorPalette={"red"}>Delete Acocount</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Are you sure?</DialogTitle>
+                </DialogHeader>
+                <DialogBody>
+                  <VStack gap={5}>
+                    <p>
+                      This action cannot be undone. This will permanently delete
+                      your account and remove your data from our systems.
+                    </p>
+                    <PasswordInput
+                      size={{ base: "md", md: "xl" }}
+                      placeholder="Enter Your Password"
+                      name="password"
+                      value={tempData.currentPassword}
+                      onChange={(e) =>
+                        setTempData({
+                          ...tempData,
+                          currentPassword: e.target.value.trim(),
+                        })
+                      }
+                    />
+                  </VStack>
+                </DialogBody>
+                <DialogFooter>
+                  <DialogActionTrigger asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogActionTrigger>
+                  <Button onClick={handleDeleteAccount} colorPalette="red">
+                    Delete account
+                  </Button>
+                </DialogFooter>
+                <DialogCloseTrigger />
+              </DialogContent>
+            </DialogRoot>
+          </Flex>
+        </Box>
       </VStack>
     </Container>
   );
