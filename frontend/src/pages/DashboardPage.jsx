@@ -12,7 +12,6 @@ import {
   Button,
   Heading,
   Flex,
-  HStack,
   useDialog,
 } from "@chakra-ui/react";
 import { PasswordInput } from "@/components/ui/password-input";
