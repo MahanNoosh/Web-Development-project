@@ -253,7 +253,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Container maxW={"xl"} py={12}>
+    <Container py={12}>
       <VStack gap={8}>
         <Heading as={"h1"} size={"2xl"} textAlign={"center"} mb={8}>
           <Text
@@ -269,7 +269,7 @@ const Dashboard = () => {
           </Text>
         </Heading>
         <Box
-          width={{ base: "300px", sm: "500px", md: "600px" }}
+          width={{ base: "300px", sm: "450px", md: "600px" }}
           p={6}
           bg={useColorModeValue("white", "black")}
           rounded={"lg"}
@@ -334,7 +334,7 @@ const Dashboard = () => {
           rounded={"lg"}
           shadow={"md"}
         >
-          <Flex justifyContent={"space-between"}>
+          <Flex direction={{ base: "column", sm: "row" }} justifyContent={"space-between"}>
             <DialogRoot
               role="alertdialog"
               motionPreset={"slideInBottom"}

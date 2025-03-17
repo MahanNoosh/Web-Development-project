@@ -351,12 +351,10 @@ const CreatePage = () => {
               size={{ base: "sm", md: "md" }}
               checked={newTask.isPublic}
               trackLabel={{
-                //on: <LuEye color="black"/>,
-                off: <HiX color="white" size={13} />,
+                off: <HiX color={useColorModeValue("black", "white")} size={13} />,
               }}
               thumbLabel={{
-                on: <HiCheck color="white" size={13} />,
-                //off: <LuEyeOff color="black" />,
+                on: <HiCheck color={useColorModeValue("black", "white")} size={13} />,
               }}
               onCheckedChange={({ checked }) => {
                 setNewTask({ ...newTask, isPublic: checked });
