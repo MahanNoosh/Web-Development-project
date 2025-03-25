@@ -16,6 +16,9 @@ export default defineConfig({
         target: `http://localhost:${PORT}`
       }
     }
+  },
+  build: {
+    outDir: 'dist'
   }
 });
 
