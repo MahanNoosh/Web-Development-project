@@ -6,19 +6,18 @@ import dotenv from "dotenv";
 dotenv.config();
 const PORT = process.env.PORT || 2450;
 
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   server: {
     proxy: {
       "/api": {
-        target: `http://localhost:${PORT}`
-      }
+        target: `http://localhost:${PORT}`,
+      },
     },
-    build: {
-      outDir: 'dist'
-    }
+  },
+  build: {
+    outDir: "dist",
   },
 });
 
