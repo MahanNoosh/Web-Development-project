@@ -1,18 +1,23 @@
-import express from "express";
-import dotenv from "dotenv";
-import { connectDB } from "./config/database.js";
-import taskRoutes from "./routes/task.route.js";
-import userRouters from "./routes/user.route.js";
-import path from "path";
-import cookieParser from "cookie-parser";
+import express from 'express';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import cookieParser from 'cookie-parser';
+import { connectDB } from './config/database.js';
+import taskRoutes from './routes/task.route.js';
+import userRouters from './routes/user.route.js';
 
-dotenv.config();
+// Fix for __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
 const PORT = process.env.PORT || 2450;
 
+// Middleware
 app.use(express.json());
-const __dirname = path.resolve();
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
