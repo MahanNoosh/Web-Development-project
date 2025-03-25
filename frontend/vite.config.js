@@ -15,6 +15,9 @@ export default defineConfig({
       "/api": {
         target: `http://localhost:${PORT}`
       }
+    },
+    build: {
+      outDir: 'dist'
     }
   },
 });
