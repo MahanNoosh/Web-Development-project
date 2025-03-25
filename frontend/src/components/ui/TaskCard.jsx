@@ -70,7 +70,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
-const TaskCard = ({ task }) => {
+const TaskCard = ({ task, home }) => {
   const loggedinUser = useProfile((state) => state.loggedinUser);
   const updateUser = useProfile((state) => state.updateUser);
   const bg = useColorModeValue("white", "gray.800");
@@ -206,8 +206,9 @@ const TaskCard = ({ task }) => {
       _hover={{ transform: "Scale(1.05)" }}
       bg={bg}
     >
-      <IconButton
-        right={"45%"}
+      {!home && (
+        <IconButton
+        right={"47.5%"}
         size={"xs"}
         position={"absolute"}
         variant={"plain"}
@@ -217,6 +218,7 @@ const TaskCard = ({ task }) => {
         <IoIosArrowUp strokeWidth={15} stroke={useColorModeValue("white", "gray")} fill={useColorModeValue("gray", "white")} /> 
       </IconButton>
 
+      )}
       {task.image && (
         <AspectRatio ratio={16 / 9}>
           <Image
@@ -638,10 +640,11 @@ const TaskCard = ({ task }) => {
           </HoverCardRoot>
         </Float>
       </Box>
-      <IconButton
-        right={"45%"}
+      {!home && (
+        <IconButton
+        right={"47.5%"}
         size={"xs"}
-        top={task.image?"91%":"82%"}
+        top={task.image?"91%":"87%"}
         position={"absolute"}
         variant={"plain"}
         zIndex={"999"}
@@ -649,6 +652,7 @@ const TaskCard = ({ task }) => {
       >
         <IoIosArrowDown strokeWidth={15} stroke={useColorModeValue("white", "gray")} fill={useColorModeValue("gray", "white")}/>
       </IconButton>
+      )} 
     </Box>
   );
 };

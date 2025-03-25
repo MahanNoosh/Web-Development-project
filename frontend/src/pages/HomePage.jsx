@@ -27,7 +27,7 @@ const HomePage = () => {
           Current Tasks
         </Text>
         {tasks.map((task, index) => (
-          <TaskCard key={task._id} task={tasks[tasks.length - 1 - index]} />
+          <TaskCard key={task._id} task={tasks[tasks.length - 1 - index]} home={true} />
         ))}
         {tasks.length == 0 && (
           <Text fontSize={{ base: "md", sm: "lg" }}>
