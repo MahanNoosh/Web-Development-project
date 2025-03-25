@@ -17,9 +17,6 @@ export default defineConfig({
       }
     }
   },
-  build: {
-    outDir: 'dist'
-  }
 });
 
 console.log(`Proxy set to http://localhost:${PORT}`);
