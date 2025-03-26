@@ -158,9 +158,9 @@ export const getProfile = async (req, res) => {
 };
 
 export const getUser = async (req, res) => {
-  const { userid } = req.params;
+  const { id } = req.params;
   try {
-    const user = await User.findOne(userid);
+    const user = await User.findOne({ userid: id });
     if (!user) {
       return res
         .status(200)
