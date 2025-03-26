@@ -43,11 +43,15 @@ export const useMyTasks = create((set, getState) => ({
       // Update the previous and next task pointers
       if (pTask && pTask.next === id) {
         pTask.next = nTask ? nTask._id : null;
-        lastTask = pTask;
+      }
+      if (!pTask){
+        firstTask = nTask;
       }
       if (nTask && nTask.prev === id) {
         nTask.prev = pTask ? pTask._id : null;
-        firstTask = nTask;
+      }
+      if (!nTask){
+        lastTask = pTask;
       }
 
       // Update previous and next tasks if necessary
@@ -170,13 +174,13 @@ export const useMyTasks = create((set, getState) => ({
   
       const { updateTaskHelper } = await getState(); // Get updateTask from state
   
-      // 🔥 Fast UI Update
+      // Fast UI Update
       let newMyTasks = [...getState().myTasks];
       let index = newMyTasks.findIndex((task) => task._id === fTask._id);
       [newMyTasks[index], newMyTasks[index - 1]] = [newMyTasks[index - 1], newMyTasks[index]];
       set(() => ({ myTasks: newMyTasks }));
   
-      // 🔄 Database Update
+      // Database Update
       fTask.prev = pTask ? pTask._id : null;
       fTask.next = sTask._id;
       let result = await updateTaskHelper(fTask);
